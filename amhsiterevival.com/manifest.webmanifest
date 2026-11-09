@@ -1,0 +1,41 @@
+{
+    "name":  "AMH FieldScan AI",
+    "short_name":  "FieldScan",
+    "description":  "AMH FieldScan AI worker confirmations, tech capture, manager review, scoring, reports, and trade learning.",
+    "start_url":  "./fieldproof",
+    "scope":  "./",
+    "display":  "standalone",
+    "background_color":  "#07100c",
+    "theme_color":  "#08140f",
+    "orientation":  "portrait-primary",
+    "icons":  [
+                  {
+                      "src":  "./icon.svg",
+                      "sizes":  "any",
+                      "type":  "image/svg+xml",
+                      "purpose":  "any maskable"
+                  }
+              ],
+    "shortcuts":  [
+                      {
+                          "url":  "./fieldproof",
+                          "name":  "Tech Scan",
+                          "short_name":  "Scan"
+                      },
+                      {
+                          "url":  "./dash/",
+                          "name":  "Manager Review",
+                          "short_name":  "Dash"
+                      },
+                      {
+                          "url":  "./signup",
+                          "name":  "Sign Up",
+                          "short_name":  "Signup"
+                      },
+                      {
+                          "url":  "./login.html",
+                          "name":  "Login",
+                          "short_name":  "Login"
+                      }
+                  ]
+}

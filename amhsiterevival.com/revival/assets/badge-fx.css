@@ -1,0 +1,110 @@
+/* AMH badge v4/v5 (2026-10-12): the EYE is the star - v5 = crisp eye linework at rest, eye-shaped chase, beam back.
+   Intro/power-up = light chase round the ring + round the eye shield, thin electric arcs, the badge pushes toward you,
+   then 2 pulses: (1) the shield + eye outline, (2) the eyeball + pupil. Glow stays modest so the pic reads.
+   Idle = eye readable, pupil semi-glow, one soft pulse every 15s. The outline/eye light passes are the pic's own
+   pixels (Blender compositor fog-glow), so the colors are the badge's, not a tint. */
+
+/* retire the old bloom layers that washed out the eye (white eye blob, burst, rays, flash, beam, spokes, lens streak) */
+.amh-badge .eye,.amh-badge .sw,.amh-badge .sk,.amh-badge .wt,.amh-badge .fl,.amh-badge .tb,.amh-badge .tr,.amh-badge .ls,.amh-badge .sp,.amh-badge .arc{display:none!important}
+.amh-badge.sm .eye-beam{display:none!important}
+
+/* light passes sit exactly on the eye shield (box = 310..422 x 266..434 of the 720px badge) */
+.amh-badge .fx-ol,.amh-badge .fx-ey{position:absolute;left:43.056%;top:36.944%;width:15.556%;height:23.333%;pointer-events:none;mix-blend-mode:screen;background:center/100% 100% no-repeat;z-index:3}
+/* v5 detail layer: the eye's own linework, de-hazed (luminance clarity) + Blender sharpen, normal blend, always on.
+   This is what you see at rest: outline, eyeball, iris rings and pupil edge crisp, no green haze. */
+.amh-badge .fx-dt{position:absolute;left:43.056%;top:36.944%;width:15.556%;height:23.333%;pointer-events:none;z-index:2;background:url(/revival/assets/amh-eye-detail.webp?v=1) center/100% 100% no-repeat}
+.amh-badge .fx-ol{background-image:url(/revival/assets/amh-eye-outline.webp?v=1);opacity:0}
+.amh-badge .fx-ey{background-image:url(/revival/assets/amh-eye-iris.webp?v=1);opacity:0}
+/* pupil: a small soft semi-glow, never a white blob */
+.amh-badge .fx-pu{position:absolute;left:50.875%;top:47.99%;width:4.4%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;mix-blend-mode:screen;z-index:4;opacity:.35;width:3%;
+  background:radial-gradient(circle,rgba(250,255,236,.95) 0 22%,rgba(170,255,190,.4) 45%,rgba(57,255,136,0) 66%)}
+.amh-badge.sm .fx-pu{width:8%}
+.amh-badge .fx-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:5}
+.fx-svg .fx-ring,.fx-svg .fx-sh,.fx-svg .fx-al,.fx-svg .fx-idl{fill:none;stroke-linecap:round;opacity:0}
+/* the eye IS the border: chase lights trace the almond eye + shield edge */
+.fx-svg .fx-al{stroke:#f2ffe9;stroke-width:2.4;stroke-dasharray:12 88;filter:drop-shadow(0 0 1.5px #9dffc4)}
+.fx-svg .fx-idl{stroke:#fffbe8;stroke-width:2.4;stroke-dasharray:10 90}
+.fx-svg .fx-idl.a{stroke:#eafff2;stroke-width:2}
+.fx-svg .fx-ring{stroke:#eafff2;stroke-width:5;stroke-dasharray:9 91;filter:drop-shadow(0 0 4px #39ff88)}
+.fx-svg .fx-ring.t{stroke:#39ff88;stroke-width:3;stroke-dasharray:22 78;filter:none}
+.fx-svg .fx-sh{stroke:#fff6d2;stroke-width:3.2;stroke-dasharray:14 86;filter:drop-shadow(0 0 2.5px #ffe7a0)}
+.fx-svg .fx-sh.b{stroke:#c9ffd9;filter:drop-shadow(0 0 2.5px #39ff88)}
+.fx-svg .fx-arcs{opacity:0;filter:drop-shadow(0 0 2px #39ff88)}
+.fx-svg .fx-arcs path{fill:none;stroke:#effff5;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+.fx-svg .fx-arcs path.g{stroke:#fff3c8;stroke-width:1.9}
+
+/* idle: one gentle on/off pulse every 15s (outline breathes, then the eye) - the rest of the time it just sits readable */
+.amh-badge:not(.pw) .fx-ol{animation:fxIdleOl 15s ease-in-out infinite}
+.amh-badge:not(.pw) .fx-ey{animation:fxIdleEy 15s ease-in-out infinite}
+.amh-badge:not(.pw) .fx-pu{animation:fxIdlePu 15s ease-in-out infinite}
+.f-brand .amh-badge:not(.pw) .fx-ol,.f-brand .amh-badge:not(.pw) .fx-ey,.f-brand .amh-badge:not(.pw) .fx-pu{animation-delay:-7s}
+@keyframes fxIdleOl{0%,100%{opacity:0}5%{opacity:.4}10%{opacity:0}}
+@keyframes fxIdleEy{0%,100%{opacity:0}}
+@keyframes fxIdlePu{0%,5%,100%{opacity:.35}9%{opacity:.9}12%{opacity:.05}15%{opacity:.35}}
+.amh-badge:not(.pw) .fx-dt{animation:fxIdleDt 15s ease-in-out infinite}
+.f-brand .amh-badge:not(.pw) .fx-dt{animation-delay:-7s}
+@keyframes fxIdleDt{0%,4%,100%{filter:none}8%{filter:brightness(1.22) contrast(1.12)}14%{filter:none}}
+.amh-badge:not(.pw) .fx-idl{opacity:.75;animation:fxIdl 7s linear infinite}
+.amh-badge:not(.pw) .fx-idl.a{animation-duration:5s;animation-direction:reverse;opacity:.6}
+.amh-badge.sm .fx-idl{display:none}
+@keyframes fxIdl{to{stroke-dashoffset:-100}}
+
+/* power-up (6.4s, class .pw) */
+.amh-badge.pw .fx-ring{animation:fxRing 6.4s linear both}
+.amh-badge.pw .fx-ring.t{animation-name:fxRingT}
+.amh-badge.pw .fx-sh{animation:fxSh 6.4s linear both}
+.amh-badge.pw .fx-sh.b{animation-name:fxShB}
+.amh-badge.pw .fx-al{animation:fxAl 6.4s linear both}
+.amh-badge.pw .fx-al.b{animation-name:fxAlB}
+@keyframes fxAl{0%,9%{opacity:0;stroke-dashoffset:0}12%{opacity:1}52%{opacity:1}57%,100%{opacity:0;stroke-dashoffset:-300}}
+@keyframes fxAlB{0%,9%{opacity:0;stroke-dashoffset:50}12%{opacity:.8}52%{opacity:.8}57%,100%{opacity:0;stroke-dashoffset:350}}
+.amh-badge.pw .fx-ol{animation:fxOl 6.4s ease-out both}
+.amh-badge.pw .fx-ey{animation:fxEy 6.4s ease-out both}
+.amh-badge.pw .fx-pu{animation:fxPu 6.4s ease-out both}
+/* two laps of the ring (0.2s-2.9s) */
+@keyframes fxRing{0%,3%{opacity:0;stroke-dashoffset:0}6%{opacity:1}40%{opacity:1}46%,100%{opacity:0;stroke-dashoffset:-200}}
+@keyframes fxRingT{0%,3%{opacity:0;stroke-dashoffset:6}6%{opacity:.55}40%{opacity:.45}46%,100%{opacity:0;stroke-dashoffset:-194}}
+/* two laps round the eye shield, both ways (0.5s-3.1s) */
+@keyframes fxSh{0%,8%{opacity:0;stroke-dashoffset:0}11%{opacity:1}44%{opacity:1}49%,100%{opacity:0;stroke-dashoffset:-200}}
+@keyframes fxShB{0%,8%{opacity:0;stroke-dashoffset:50}11%{opacity:.85}44%{opacity:.85}49%,100%{opacity:0;stroke-dashoffset:250}}
+/* pulse 1 = outline (peak ~3.1s), pulse 2 = eyeball + pupil (peak ~3.9s); both settle to the idle level */
+@keyframes fxOl{0%,40%{opacity:0;filter:brightness(1)}47%{opacity:.85;filter:brightness(1.25)}50%{opacity:.8;filter:brightness(1.1)}58%{opacity:.25;filter:brightness(1)}66%,100%{opacity:0}}
+@keyframes fxEy{0%,53%{opacity:.05;filter:brightness(1)}60%{opacity:.9;filter:brightness(1.35)}64%{opacity:.9;filter:brightness(1.15)}72%{opacity:.25;filter:brightness(1)}82%,100%{opacity:0}}
+@keyframes fxPu{0%,10%{opacity:0}30%{opacity:.3}52%{opacity:.2}61%{opacity:.85}66%{opacity:1}82%{opacity:.35}100%{opacity:.35}}
+
+/* the dim at the start leaves a window over the eye so it reads first; lifts as pulse 1 hits */
+.amh-badge .dk{-webkit-mask:radial-gradient(circle at 50.9% 47.8%,transparent 0 6%,#000 13%);mask:radial-gradient(circle at 50.9% 47.8%,transparent 0 6%,#000 13%)}
+.amh-badge.pw .dk{animation:fxDk 6.4s cubic-bezier(.3,.1,.2,1) both}
+@keyframes fxDk{0%{opacity:.85}30%{opacity:.7}50%{opacity:.15}60%,100%{opacity:0}}
+
+/* the pic's light points come on in sequence, small (no star-burst flashes) */
+.amh-badge.pw .tw{animation:fxNode 6.4s ease-out both!important;animation-delay:calc(.15s + var(--i,0) * .08s)!important}
+@keyframes fxNode{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}5%{opacity:.9;transform:translate(-50%,-50%) scale(1.1) rotate(25deg)}14%{opacity:.6;transform:translate(-50%,-50%) scale(.8) rotate(40deg)}45%{opacity:.5;transform:translate(-50%,-50%) scale(.8)}60%,100%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(90deg)}}
+
+/* push toward the viewer: comes up from slightly back, swells toward you through the chase, settles as the eye resolves.
+   Uses the independent `scale` property so it never fights the intro's fly-to-header transform or the footer tilt. */
+.amh-badge.pw,.amh-live .amh-badge.pw{animation:fxPush 6.4s cubic-bezier(.35,0,.25,1) both}
+@keyframes fxPush{0%{scale:.86}44%{scale:1.2}52%{scale:1.17}70%{scale:1.06}100%{scale:1}}
+#amhIntro .amh-badge{width:min(360px,70vw)}
+#amhIntro .amh-badge.pw{animation-name:fxPushBig}
+@keyframes fxPushBig{0%{scale:.82}44%{scale:1.32}52%{scale:1.28}70%{scale:1.12}100%{scale:1}}
+#amhIntro .amh-badge.pw img,.f-brand .amh-badge.pw img{animation:fxShadow 6.4s ease-out both}
+@keyframes fxShadow{0%{box-shadow:0 10px 30px -18px rgba(0,0,0,.6)}44%{box-shadow:0 40px 70px -24px rgba(0,0,0,.85)}100%{box-shadow:0 18px 40px -20px rgba(0,0,0,.7)}}
+
+/* footer pic was pushed to brightness 1.5 - that is what flattened the eye. Real colors, a hair lifted. */
+.f-brand .amh-badge img{filter:brightness(1.12) saturate(1.08) contrast(1.04)!important}
+
+@media(prefers-reduced-motion:reduce){.amh-badge .fx-ol,.amh-badge .fx-ey,.amh-badge .fx-pu,.amh-badge .fx-svg *{animation:none!important}.amh-badge .fx-svg{display:none}}
+
+/* v5 beam is back: a crisp, defined beam out of the PUPIL that fires right after pulse 2 (~4.1s), holds, then retracts into the eye.
+   Core + thread only - no haze wedge. Not on the 52px header badge. */
+.amh-badge .eye-beam{left:50.875%;top:47.99%;filter:drop-shadow(0 0 2px #c8ffdf) drop-shadow(0 0 6px rgba(57,255,136,.55))}
+.amh-badge .eye-beam .beam-haze,.amh-badge .eye-beam .beam-source{opacity:0}.amh-badge .eye-beam .beam-body{opacity:.32}.amh-badge .eye-beam .beam-core{opacity:1}.amh-badge .eye-beam .beam-thread{opacity:.7}
+.amh-badge.pw .eye-beam,.f-brand .amh-badge.pw .eye-beam{animation:fxBeam 6.4s cubic-bezier(.3,0,.3,1) both}
+@keyframes fxBeam{0%,63%{opacity:0;transform:translateY(-50%) rotate(-17deg) scaleX(.005) scaleY(.4)}
+  64%{opacity:1;transform:translateY(-50%) rotate(-17deg) scaleX(.04) scaleY(.9)}
+  69%{opacity:1;transform:translateY(-50%) rotate(-17deg) scaleX(1) scaleY(.7)}
+  78%{opacity:1;transform:translateY(-50%) rotate(-17deg) scaleX(1.03) scaleY(.6)}
+  86%{opacity:.9;transform:translateY(-50%) rotate(-17deg) scaleX(.02) scaleY(.35)}
+  88%,100%{opacity:0;transform:translateY(-50%) rotate(-17deg) scaleX(.005) scaleY(.2)}}
+@media(prefers-reduced-motion:reduce){.amh-badge .fx-dt{animation:none!important}}

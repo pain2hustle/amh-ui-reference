@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security Controls - AMH Site Revival</title>
+<meta name="description" content="Security controls and operational safeguards for AMH Site Revival.">
+<meta name="robots" content="index,follow"><link rel="canonical" href="https://www.amhsiterevival.com/security">
+<style>
+:root{--bg:#f8fafc;--card:#ffffff;--line:#dbe3ee;--ink:#111827;--muted:#526071;--accent:#2563eb}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.65}a{color:var(--accent)}a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}.wrap{max-width:860px;margin:0 auto;padding:0 22px}header{border-bottom:1px solid var(--line);background:rgba(255,255,255,.92);backdrop-filter:blur(12px)}header .wrap{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-weight:900;text-decoration:none;color:var(--ink);letter-spacing:.02em}.home{font-size:13px;font-weight:800;text-decoration:none;color:var(--muted)}main{padding:44px 0 76px}h1{font-size:clamp(32px,5vw,48px);line-height:1.05;margin:0 0 8px;letter-spacing:0}h2{font-size:21px;margin:34px 0 8px}h3{font-size:17px;margin:22px 0 6px}.meta{color:var(--muted);font-size:13px;font-weight:800;margin-bottom:24px}.lead{font-size:18px;color:#334155;max-width:760px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px;margin:20px 0}p,li{color:#334155}ul{padding-left:22px}li{margin:6px 0}.note{border-left:4px solid var(--accent);padding-left:14px;color:var(--muted);font-size:14px}footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:13px}.links{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px}.links a{font-weight:800;text-decoration:none}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/">AMH Site Revival</a><a class="home" href="/">Back home</a></div></header>
+<main><div class="wrap">
+<h1>Security Controls</h1>
+<p class="meta">Effective date: July 22, 2026 | Last updated: August 3, 2026</p>
+<p class="lead">Security controls and operational safeguards for AMH Site Revival.</p>
+<p class="note">AMH Site Revival is operated by Service Pricer LLC.</p>
+
+<div class="card"><p>This page summarizes the practical controls AMH Site Revival uses to protect accounts, connected services, customer data, and operational workflows.</p></div>
+<h2>Access Controls</h2>
+<p>Access is limited to authorized users and service processes. We use account authentication, role-based access where supported, least-privilege provider tokens, and connected-account permissions scoped to the workflow being performed.</p>
+<h2>Approval Gates</h2>
+<p>High-impact workflows should preview changes before applying them. DNS changes, code commits, deploys, publishing, campaign sends, payment actions, and destructive operations should require explicit approval unless the account owner intentionally configures automation.</p>
+<h2>Security in Transit</h2>
+<p>Public pages, dashboards, API calls, callbacks, and authentication flows use HTTPS/TLS. Sensitive tokens should never be sent over plain HTTP.</p>
+<h2>Secrets and Token Handling</h2>
+<p>API keys, OAuth secrets, refresh tokens, Stripe keys, database strings, and Cloudflare tokens should be stored in encrypted secrets or provider-managed environment variables. Secrets must not be committed to source control, pasted into public pages, logged, or included in generated site bundles.</p>
+<h2>Tenant Separation</h2>
+<p>Customer and workspace data should be separated by tenant, workspace, or owner identifiers. Backend policies and service checks should prevent one account from reading or writing another account's data.</p>
+<h2>Change Management</h2>
+<p>Material production changes should be tested, reviewed, and recorded through deploy logs, commit history, audit records, or task records. Rollback paths should be available for changes that affect production pages, DNS, payments, authentication, or campaigns.</p>
+<h2>Monitoring and Logging</h2>
+<p>We use provider logs and application logs to diagnose errors, failed authentications, suspicious access, integration failures, and delivery issues. Logs should avoid storing full secrets or unnecessary personal data.</p>
+<h2>Backups and Recovery</h2>
+<p>Critical data should be backed up through the database or hosting provider. Recovery depends on the specific provider and plan used for the product or customer workspace.</p>
+<h2>Responsible Testing</h2>
+<p>Security, DNS, mail, SMTP, search, and website diagnostics should be run only against domains, systems, and accounts you own or are authorized to test.</p>
+<h2>Report a Security Issue</h2>
+<p>Report suspected security issues to <a href="mailto:security@amhsiterevival.com">security@amhsiterevival.com</a>. Do not include secrets in email unless we specifically request a secure exchange method.</p>
+</div></main>
+<aside data-ai-disclosure role="note" style="width:min(calc(100% - 32px),1100px);margin:28px auto;padding:15px 18px;border:1px solid rgba(99,115,129,.35);border-left:4px solid #2563eb;border-radius:6px;background:#f8fafc;color:#1f2937;font:13px/1.55 Inter,system-ui,Segoe UI,Arial,sans-serif;text-align:left"><strong>AI-assisted content disclosure:</strong> This page may include text, code, visuals, summaries, or research drafted or edited with generative AI. Service Pricer LLC remains responsible for publication. Live or automated outputs may not receive item-by-item human review and should be independently verified. <a href="/ai-disclosure.html" style="color:#1d4ed8;font-weight:700">AI Content &amp; Review Policy</a>.</aside><footer><div class="wrap">
+<div>AMH Site Revival - operated by Service Pricer LLC - Fremont, California, United States</div>
+<div class="links"><a href="/">Home</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/security.html">Security</a><a href="/accessibility.html">Accessibility</a></div>
+</div></footer>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a57b7fd5a955cf1a',t:'MTc5NDIxMzQ4Ng=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a57b7fd5a955cf1a',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

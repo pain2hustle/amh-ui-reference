@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Office — Agent Book</title>
+<meta name="description" content="Your agents, at their desks, in a room you can walk around. Click a PC to see what it is running. Watch work walk across the floor.">
+<link rel="canonical" href="https://amhagentbook.com/office">
+<meta property="og:title" content="The Office — Agent Book">
+<meta property="og:description" content="Your agents, at their desks, in a room you can walk around. Click a PC to see what it is running. Watch work walk across the floor.">
+<meta property="og:url" content="https://amhagentbook.com/office">
+<meta name="twitter:title" content="The Office — Agent Book">
+<meta name="twitter:description" content="Your agents, at their desks, in a room you can walk around. Click a PC to see what it is running. Watch work walk across the floor.">
+<meta name="theme-color" content="#0b0e13">
+
+
+
+<meta property="og:type" content="website">
+
+<link rel="icon" href="/agentbook-logo.svg">
+<link rel="stylesheet" href="/assets/jubber-ue/jubber-ui-v5.css?v=20260820e">
+<style>
+  /* ------------------------------------------------------------------ *
+   * The page is a frame around a room. Everything here is chrome; the
+   * room itself is drawn by assets/office/*.js into #office-stage.
+   * Dark canvas, honey gold, one neon. Never a blue-and-white office.
+   * ------------------------------------------------------------------ */
+  :root{
+    --ink:#0b0e13;
+    --ink-2:#11151c;
+    --line:#232a34;
+    --text:#e6ebf3;
+    --muted:#8e97a8;
+    --gold:#edbb00;
+    --gold-soft:#ffdca8;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--ink);color:var(--text);overflow:hidden;
+    font:400 15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    /* A phone that scrolls the page while you are steering is a phone that
+       fights you. The room owns the gestures. */
+    overscroll-behavior:none;
+  }
+  #office-stage{position:fixed;inset:0;z-index:0}
+  #office-stage canvas{display:block;width:100%;height:100%;touch-action:none}
+
+  /* ---- top bar ---------------------------------------------------- */
+  .bar{
+    position:fixed;z-index:40;top:0;left:0;right:0;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:calc(10px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right)) 10px calc(14px + env(safe-area-inset-left));
+    background:linear-gradient(180deg,rgba(11,14,19,.92),rgba(11,14,19,0));
+    pointer-events:none;
+  }
+  .bar > *{pointer-events:auto}
+  .brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--text)}
+  .brand img{width:22px;height:22px;display:block}
+  .brand b{font-size:14.5px;font-weight:800;letter-spacing:-.01em}
+  .brand span{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+  .spacer{flex:1;min-width:8px;pointer-events:none}
+  .btn{
+    -webkit-appearance:none;appearance:none;cursor:pointer;
+    background:#161b23;color:#d7dee9;border:1px solid var(--line);border-radius:10px;
+    padding:8px 12px;font:800 12.5px/1 inherit;letter-spacing:.01em;text-decoration:none;
+    display:inline-flex;align-items:center;gap:6px;min-height:36px;
+  }
+  .btn:hover{border-color:#39424f;color:#fff}
+  .btn-gold{background:rgba(237,187,0,.12);border-color:rgba(237,187,0,.42);color:var(--gold-soft)}
+  .btn-gold:hover{background:rgba(237,187,0,.2);color:#fff}
+
+  /* ---- controls card ---------------------------------------------- */
+  .keys{
+    position:fixed;z-index:40;left:calc(14px + env(safe-area-inset-left));
+    bottom:calc(14px + env(safe-area-inset-bottom));
+    max-width:min(340px,72vw);
+    background:rgba(17,21,28,.86);border:1px solid var(--line);border-radius:14px;
+    padding:11px 13px;backdrop-filter:blur(8px);
+  }
+  .keys h2{margin:0 0 7px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#6f7a8b}
+  .keys dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:5px 9px;align-items:baseline}
+  .keys dt{margin:0}
+  .keys dd{margin:0;font-size:12.5px;color:#aab4c4}
+  kbd{
+    display:inline-block;min-width:20px;text-align:center;
+    background:#0d1116;border:1px solid #2c3542;border-bottom-width:2px;border-radius:5px;
+    padding:2px 5px;font:800 10.5px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--gold-soft);
+  }
+  .keys.hid{display:none}
+
+  /* ---- boot / failure --------------------------------------------- */
+  #office-boot{
+    position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(120% 90% at 50% 0%,#161b23,#0b0e13 62%);
+    padding:26px;text-align:center;
+  }
+  #office-boot.gone{opacity:0;pointer-events:none;transition:opacity .45s ease}
+  .boot-in{max-width:400px}
+  .boot-mark{
+    width:44px;height:44px;margin:0 auto 16px;border-radius:12px;
+    border:1px solid rgba(237,187,0,.4);
+    background:radial-gradient(circle at 50% 40%,rgba(237,187,0,.32),rgba(237,187,0,.04));
+    animation:breathe 2.6s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{opacity:.45}50%{opacity:1}}
+  .boot-in h1{margin:0;font-size:22px;font-weight:800;letter-spacing:-.02em}
+  #boot-step{margin:8px 0 0;font-size:13.5px;color:var(--muted);min-height:1.4em}
+  .boot-note{margin:16px 0 0;font-size:12px;color:#5f6a7a}
+  .boot-bar{height:2px;margin:18px auto 0;width:190px;background:#1c222b;border-radius:2px;overflow:hidden}
+  .boot-bar i{display:block;height:100%;width:8%;background:linear-gradient(90deg,#7a6300,var(--gold));transition:width .3s ease}
+
+  #office-fail{
+    display:none;position:fixed;z-index:70;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:min(440px,86vw);background:#141922;border:1px solid #3a2a2a;border-radius:14px;
+    padding:16px 18px;color:#ffd9d9;font-size:14px;line-height:1.55;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .boot-mark{animation:none;opacity:.85}
+    #office-boot.gone{transition:none}
+    .boot-bar i{transition:none}
+  }
+  /* A touch device gets the on-screen stick where this card would sit, and a
+     keyboard legend it cannot use. Set from JS off the same tier flag the
+     renderer uses, so ?touch=1 tests it. */
+  body.is-touch .keys{display:none}
+  @media (max-width:640px){
+    .keys{display:none}
+    .brand span{display:none}
+  }
+  /* Phone landscape is 390 CSS px tall. A full-size bar eats a fifth of the
+     room; shrink it rather than letting chrome win. */
+  @media (max-height:560px){
+    .bar{padding-top:calc(7px + env(safe-area-inset-top));padding-bottom:7px;gap:7px}
+    .btn{padding:6px 10px;min-height:30px;font-size:11.5px;border-radius:9px}
+    .brand b{font-size:13px}
+    .brand span{display:none}
+    .brand img{width:19px;height:19px}
+  }
+</style>
+<link rel="stylesheet" href="/assets/office/office-shell.css?v=20260920">
+</head>
+<body>
+
+<div id="office-stage" aria-hidden="true"></div>
+
+<header class="bar" style="padding-right:calc(64px + env(safe-area-inset-right))">
+  <a class="brand" href="https://amhagentbook.com/dashboard">
+    <img src="/agentbook-logo.svg" alt="">
+    <b>The Office</b><span>Agent Book</span>
+  </a>
+  <div class="spacer"></div>
+  <button class="btn" type="button" id="btn-desk">My desk</button>
+  <button class="btn" type="button" id="btn-board">Whiteboard</button>
+  <a class="btn" id="btn-academy" href="/academy">AMH Academy</a>
+  <!-- The sky lift already rides to the roof, but only if you happen to walk
+       over and stand next to it. Nobody finds a lift they do not know exists.
+       This is the same ride, reachable from anywhere in the room. -->
+  <button class="btn" type="button" id="btn-roof" title="Enter the elevator and go upstairs">Elevator · Roof</button>
+  <a class="btn btn-gold" href="https://amhagentbook.com/dashboard">Back to dashboard</a>
+</header>
+
+<aside class="keys" id="keys">
+  <h2>Getting around</h2>
+  <dl>
+    <dt><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></dt><dd>walk</dd>
+    <dt><kbd>Shift</kbd></dt><dd>hurry</dd>
+    <dt>Double-click</dt><dd>walk to that spot</dd>
+    <dt>Click a PC</dt><dd>logs, task, gauges, commands</dd>
+    <dt><kbd>E</kbd></dt><dd>talk to whoever you are stood next to</dd>
+    <dt><kbd>P</kbd></dt><dd>frame rate, if you are curious</dd>
+  </dl>
+</aside>
+
+<div id="office-gate"></div>
+<div id="office-fail" role="alert"></div>
+
+<div id="office-boot">
+  <div class="boot-in">
+    <div class="boot-mark"></div>
+    <h1>Opening the office</h1>
+    <p id="boot-step">Loading the engine…</p>
+    <div class="boot-bar"><i id="boot-bar"></i></div>
+    <p class="boot-note">The 3D loads from this site. No login needed to look around.</p>
+  </div>
+</div>
+
+<script>
+/* Boot reporting, defined before anything can fail so a failure has somewhere
+   to go. Honest by design: if an asset 404s, say WHICH one, not "loading…"
+   forever. */
+window.OFFICE_BOOT = (function () {
+  var stepEl, barEl, bootEl, failEl;
+  var pct = 8;
+  function el(id) { return document.getElementById(id); }
+  function grab() {
+    stepEl = stepEl || el('boot-step'); barEl = barEl || el('boot-bar');
+    bootEl = bootEl || el('office-boot'); failEl = failEl || el('office-fail');
+  }
+  return {
+    step: function (msg, to) {
+      grab();
+      if (stepEl) stepEl.textContent = msg;
+      if (typeof to === 'number') pct = to;
+      if (barEl) barEl.style.width = pct + '%';
+    },
+    bump: function (n) { pct = Math.min(96, pct + (n || 6)); this.step(null, pct); },
+    missing: function (src) {
+      this.fail('An office file did not load: ' + String(src).split('/').pop() +
+                '. Reload the page — if it keeps happening the deploy is missing that asset.');
+    },
+    fail: function (msg) {
+      grab();
+      if (failEl) { failEl.style.display = 'block'; failEl.textContent = msg; }
+      if (bootEl) bootEl.style.display = 'none';
+      try { console.error('[office] ' + msg); } catch (e) {}
+    },
+    done: function () {
+      grab();
+      this.step('Ready.', 100);
+      if (!bootEl) return;
+      bootEl.classList.add('gone');
+      setTimeout(function () { if (bootEl && bootEl.parentNode) bootEl.parentNode.removeChild(bootEl); }, 520);
+    }
+  };
+})();
+
+/* The site's service worker (sw.js, root scope) is cache-FIRST for non-navigate
+   requests, so a cached office script would never be re-fetched after a deploy.
+   The ?v= stamp on every src below is the real fix; this sweep is the safety
+   net that heals a browser which already cached an older build. It lands on the
+   NEXT load, which is exactly when it is needed. */
+if (window.caches && caches.keys) {
+  caches.keys().then(function (names) {
+    names.forEach(function (n) {
+      caches.open(n).then(function (c) {
+        c.keys().then(function (reqs) {
+          reqs.forEach(function (r) {
+            if (r.url.indexOf('/assets/office/') >= 0 && r.url.indexOf('v=' + window.__OFFICE_V) < 0) c.delete(r);
+          });
+        });
+      });
+    });
+  }).catch(function () {});
+}
+</script>
+
+<!--
+  Load order is load-bearing. Plain classic scripts, one global (window.OFFICE),
+  no modules and no bundler — the same pattern the bee world proves works.
+
+    three.js          the engine, vendored r159 UMD. Must be first.
+    office-state.js   AB_STATE, shared with /dashboard. No deps.
+    office-phone.js   the landscape gate + layout rules. No deps.
+    office-core.js    renderer, scene, camera, the frame loop. Needs THREE only.
+    office-whiteboard.js  board notes. Needs AB_STATE.
+    office-room.js    the building. Needs core.
+    office-props.js   the furniture. Needs core.
+    office-agents.js  the cast. Needs core, room, props.
+    office-player.js  you. Needs core, room, props, agents.
+    office-ui.js      the panels. Needs everything, so it is last.
+
+  defer keeps document order, runs them all before DOMContentLoaded, and stops
+  a megabyte of engine blocking the loading screen from painting.
+-->
+<script>window.__OFFICE_V = '27';</script>
+<script defer src="/assets/office/three.js?v=13"             onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-state.js?v=13"      onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-phone.js?v=15"      onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-core.js?v=22"       onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-realview.js?v=2"></script>
+<script defer src="/assets/office/office-zoom.js?v=1"></script>
+<script defer src="/assets/office/office-loading.js?v=17"    onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-arrival.js?v=13"    onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-whiteboard.js?v=13" onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-room.js?v=13"       onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-props.js?v=18"      onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-austin.js?v=19"     onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-glb-lite.js?v=1"    onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-real-chars.js?v=20260920c"  onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-creatures.js?v=20260920c"  onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-npcs.js?v=7"       onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-items.js?v=3"      onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-hr.js?v=2"></script>
+<script defer src="/assets/office/office-agents.js?v=18"     onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-player.js?v=20261011g"     onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-presence.js?v=20261011g"   onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-cafe.js?v=19"       onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-ui.js?v=13"         onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-lounge.js?v=13"     onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-cigar.js?v=17"      onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-executive-upgrade.js?v=18" onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-glass.js?v=13"      onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-hexlight.js?v=13"   onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-suite.js?v=13"      onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-view.js?v=13"       onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-access.js?v=13"     onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-led.js?v=13"        onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-marble.js?v=13"     onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-rando.js?v=13"      onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-life.js?v=13"       onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-data-packets.js?v=16" onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-world-jubbers.js?v=16" onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-learn-ai.js?v=24" onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-beecab.js?v=1" onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-hud.js?v=1" onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-combat.js?v=9" onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-fighter.js?v=1" onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/jubber-ue/jubber-ui-v5.js?v=20260820e"></script>
+<script>
+window.AMH_ARCADE_CONFIG = {
+  api: '/api/arcade',
+  sitekey: '0x4AAAAAAEGyh-SSO_LYShqp'
+};
+</script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script defer src="/assets/office/office-wayfinding.js?v=13" onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-arcade.js?v=13"     onerror="OFFICE_BOOT.missing(this.src)"></script>
+<script defer src="/assets/office/office-perf.js?v=13"       onerror="OFFICE_BOOT.missing(this.src)"></script>
+<!-- Hides the ceiling the moment the camera leaves the floor, so orbiting up or
+     out shows the penthouse and the bridge instead of the underside of a lid. -->
+<script defer src="/assets/office/office-ceilingcut.js?v=13" onerror="OFFICE_BOOT.missing(this.src)"></script>
+
+<script>
+/* ---------------------------------------------------------------------------
+ * Booting the office.
+ *
+ * Every module self-registers its own per-frame work with the engine, so this
+ * is genuinely only assembly: mount the canvas, raise the building, furnish the
+ * communal half of it, seat the cast, put you at the door, and start the loop.
+ *
+ * Deliberately paranoid about order — a black rectangle with no error is the
+ * single most likely way this page fails, so every step is checked and every
+ * failure says which step it was.
+ * ------------------------------------------------------------------------- */
+(function () {
+  'use strict';
+  var B = window.OFFICE_BOOT;
+
+  function boot() {
+    var OFFICE = window.OFFICE;
+
+    if (typeof window.THREE === 'undefined') {
+      return B.fail('The 3D engine did not load. Reload the page — if it keeps happening, /assets/office/three.js is missing from the deploy.');
+    }
+    if (!OFFICE || !OFFICE.core) {
+      return B.fail('The office engine did not start. Reload the page.');
+    }
+    var core = OFFICE.core;
+    var loader = OFFICE.loading;
+    if (loader) loader.build({ progress: 15 });
+    function bootStep(msg, pct) {
+      B.step(msg, pct);
+      if (loader) loader.progress(pct, msg);
+    }
+    if (core.failed) return B.fail(core.failed);
+
+    // ---- 1. canvas -------------------------------------------------------
+    bootStep('Standing up the room…', 24);
+    if (!core.mount('#office-stage')) return B.fail('Nowhere to draw the office. Reload the page.');
+
+    // ---- 2. the building -------------------------------------------------
+    if (!OFFICE.room || !OFFICE.room.build) return B.fail('The room did not load (/assets/office/office-room.js).');
+    if (!OFFICE.room.build()) return B.fail('The room failed to build. Reload the page.');
+    if (OFFICE.arrival && OFFICE.arrival.build) OFFICE.arrival.build({ destination: '/roof' });
+
+    // ---- 3. the furniture nobody else owns -------------------------------
+    bootStep('Putting the furniture in…', 46);
+    try { furnish(OFFICE); } catch (e) { try { console.error('[office] furnishing failed', e); } catch (e2) {} }
+    // His corner office, and the honeycomb ceiling — a hive should have one.
+    try { if (OFFICE.suite && OFFICE.suite.build) OFFICE.suite.build(); } catch (e) { try{console.error('[office] suite',e);}catch(e2){} }
+    try { if (OFFICE.executiveUpgrade && OFFICE.executiveUpgrade.build) OFFICE.executiveUpgrade.build(); }
+    catch (e) { try { console.error('[office] executive upgrade failed', e); } catch (e2) {} }
+    try { if (OFFICE.hexlight && OFFICE.hexlight.build) OFFICE.hexlight.build(); } catch (e) {}
+    // Ceiling: modern linear LED panels on a real pitch, then Italian marble underfoot.
+    /* office-led is superseded by the hex array — three stacked light installs is why the room went white. */
+    try { if (OFFICE.marble && OFFICE.marble.apply) OFFICE.marble.apply(); } catch (e) {}
+    // Curtain wall: this is a tower floor, so glass on nearly every side.
+    try { if (OFFICE.glass && OFFICE.glass.build) OFFICE.glass.build(); }
+    catch (e) { try { console.error('[office] curtain wall failed', e); } catch (e2) {} }
+    // The green half of the lounge, and his name on the wall in neon.
+    try { if (OFFICE.lounge && OFFICE.lounge.build) OFFICE.lounge.build(); }
+    catch (e) { try { console.error('[office] lounge failed', e); } catch (e2) {} }
+    try { if (OFFICE.wayfinding && OFFICE.wayfinding.build) OFFICE.wayfinding.build(); }
+    catch (e) { try { console.error('[office] wayfinding failed', e); } catch (e2) {} }
+    try {
+      if (OFFICE.arcade && OFFICE.arcade.build) {
+        OFFICE.arcade.build({ x: 6.35, z: 1.15, rotation: -Math.PI / 2 });
+      }
+    } catch (e) { try { console.error('[office] arcade failed', e); } catch (e2) {} }
+    // Bee World 3D stand-up cabinet in the north-west corner (Austin, 2026-09-13).
+    try { if (OFFICE.beecab && OFFICE.beecab.place) OFFICE.beecab.place({ x: -13.0, z: -7.0, rotY: Math.PI * 0.75, room: 'office' }); }
+    catch (e) { try { console.error('[office] bee cabinet failed', e); } catch (e2) {} }
+
+    // ---- 4. the cast -----------------------------------------------------
+    bootStep('Seating the agents…', 66);
+    var seated = [];
+    if (OFFICE.agents && OFFICE.agents.spawn) { try { seated = OFFICE.agents.spawn() || []; } catch (e) { console.error(e); } }
+    try { if (OFFICE.worldJubbers && OFFICE.worldJubbers.office) OFFICE.worldJubbers.office(); }
+    catch (e) { try { console.error('[office] dashboard Jubbers failed', e); } catch (e2) {} }
+
+    // ---- 5. you ----------------------------------------------------------
+    bootStep('Finding you a way in…', 82);
+    var DOOR = { x: 7.0, z: 6.6 };
+    if (OFFICE.player && OFFICE.player.spawn) { try { OFFICE.player.spawn({ x: DOOR.x, z: DOOR.z }); } catch (e) { console.error(e); } }
+    try { if (OFFICE.presence && OFFICE.presence.build) OFFICE.presence.build({ level: 'office' }); }
+    catch (e) { try { console.error('[office] live presence failed', e); } catch (e2) {} }
+    // Friendly combat: every seated agent, every live player, is a target.
+    try {
+      if (OFFICE.combat && OFFICE.agents && OFFICE.agents.rig) {
+        var keys = []; try { var ro = OFFICE.agents.roster ? OFFICE.agents.roster() : []; keys = (Array.isArray(ro) ? ro : Object.keys(ro || {})).map(function (a) { return typeof a === 'string' ? a : (a.key || a.id || a.name); }); } catch (e) {}
+        keys.forEach(function (k) { try { var rig = OFFICE.agents.rig(String(k).toLowerCase()); if (rig && rig.root && rig.root.visible !== false) OFFICE.combat.registerRig(String(k), rig, 'agent'); } catch (e) {} });
+      }
+      if (OFFICE.combat && OFFICE.presence && OFFICE.presence.rigs) { var seenRigs = {}; core.add(function () { OFFICE.presence.rigs().forEach(function (r) { if (seenRigs[r.id]) return; seenRigs[r.id] = 1; OFFICE.combat.registerRig(r.name, r.rig, 'player', { peerId: r.id }); }); }, { name: 'combat-players', every: 30 }); }
+    } catch (e) { try { console.error('[office] combat failed', e); } catch (e2) {} }
+    try { if (OFFICE.cafe && OFFICE.cafe.build) OFFICE.cafe.build(); }
+    catch (e) { try { console.error('[office] cafe interaction failed', e); } catch (e2) {} }
+    try { if (OFFICE.cigar && OFFICE.cigar.build) OFFICE.cigar.build(); }
+    catch (e) { try { console.error('[office] cigar interaction failed', e); } catch (e2) {} }
+    try { if (OFFICE.access && OFFICE.access.build) OFFICE.access.build(); }
+    catch (e) { try { console.error('[office] workstation access failed', e); } catch (e2) {} }
+    try { if (OFFICE.learnAI && OFFICE.learnAI.build) OFFICE.learnAI.build(); }
+    catch (e) { try { console.error('[office] Learn AI workstation failed', e); } catch (e2) {} }
+    try {
+      if (OFFICE.dataPackets && OFFICE.dataPackets.build) OFFICE.dataPackets.build({
+        area: 'Lunch + review counter',
+        anchors: [{ x: 8.7, z: 2.0 }, { x: 10.0, z: 2.0 }, { x: 11.3, z: 2.0 }, { x: 12.6, z: 2.0 }]
+      });
+    } catch (e) { try { console.error('[office] data packets failed', e); } catch (e2) {} }
+
+    // ---- 6. run ----------------------------------------------------------
+    try {
+      if (OFFICE.perf && OFFICE.perf.build) console.info('[office perf]', OFFICE.perf.build());
+    } catch (e) { try { console.error('[office] performance pass failed', e); } catch (e2) {} }
+    core.start();
+    if (!core.isRunning()) return B.fail('The office loaded but the frame loop never started. Reload the page.');
+
+    wireChrome(OFFICE);
+
+    // You come in through the door and walk to your desk. That short walk is
+    // the whole "you get home" idea, and it is also the first thing that shows
+    // the room has depth. Reduced motion skips the walk and just puts you there.
+    function welcome() {
+      setTimeout(function () {
+        try {
+          if (core.reducedMotion) {
+            var h = OFFICE.room.home;
+            if (h && OFFICE.player.warpTo) OFFICE.player.warpTo(h.x, h.z);
+          } else if (OFFICE.player.goHome) {
+            OFFICE.player.goHome();
+          }
+        } catch (e) {}
+        try { if (OFFICE.ui && OFFICE.ui.hello) OFFICE.ui.hello(); } catch (e) {}
+        try { if (OFFICE.presence && OFFICE.presence.show) OFFICE.presence.show(); } catch (e) {}
+        try {
+          if (OFFICE.ui && OFFICE.ui.toast && seated.length === 0) {
+            OFFICE.ui.toast('Nobody is desked in this office yet. Drag an agent onto the floor on the dashboard.');
+          }
+        } catch (e) {}
+      }, core.reducedMotion ? 60 : 700);
+    }
+
+    function revealOffice() {
+      B.done();
+      if (OFFICE.arrival && OFFICE.arrival.arrive &&
+          OFFICE.arrival.arrive({ onComplete: welcome })) return;
+      welcome();
+    }
+    var characterReady = OFFICE.realChars ? OFFICE.realChars.ready(OFFICE.player.group) : Promise.resolve(true);
+    if (loader && loader.progress) loader.progress(92, 'Preparing your 3D character…');
+    characterReady.then(function () {
+      if (loader && loader.finish) loader.finish(revealOffice);
+      else revealOffice();
+    });
+  }
+
+  // -------------------------------------------------------------------------
+  // The communal half of the room.
+  //
+  // office-room.js builds the shell and the millwork. office-agents.js builds
+  // each desk and the personal things on it — JSON's crib and his sons,
+  // Entropy's pasta station, Charlotte's bed. What is left over is the stuff
+  // that belongs to nobody: the meeting table, the couches, the vending
+  // machine, the plants. That is this function, and it is the only place in
+  // /office that decides where a communal object stands.
+  //
+  // Two rules govern every coordinate below, both from the floor plan:
+  //   - nothing taller than 2.0 m inside x∈[+3,+14], z∈[+3,+8] — that wedge is
+  //     the camera's throat and a tall prop there hides the whole room;
+  //   - nothing inside a walking lane (W1 lobby 7.0/6.8, W2 3.9/3.0,
+  //     W6 meeting door 6.2/-4.0, W7 cafe 9.0/2.0), lanes are 1.2 m wide.
+  // -------------------------------------------------------------------------
+  function furnish(OFFICE) {
+    if (!OFFICE.props || !OFFICE.props.make) return;
+    var room = OFFICE.room, core = OFFICE.core;
+    var group = new window.THREE.Group();
+    group.name = 'office-decor';
+    core.scene.add(group);
+
+    function put(name, x, z, ry, opts) {
+      var o = {}; if (opts) for (var k in opts) o[k] = opts[k];
+      o.position = [x, 0, z];
+      if (ry) o.rotationY = ry;
+      var p = OFFICE.props.make(name, o);
+      if (p) group.add(p);
+      return p;
+    }
+    function block(x0, z0, x1, z1, label) {
+      if (room && room.addCollider) room.addCollider(x0, z0, x1, z1, label || 'decor');
+    }
+    var PI = Math.PI;
+
+    // ---- meeting room ----------------------------------------------------
+    // Table centred on the point office-agents.js walks everyone to (9.25,-5.0),
+    // and kept small enough that the ring of standing positions around it
+    // (rx 1.55, rz 1.15) clears the collider with room for a 0.35 m body.
+    put('meeting-table', 9.25, -5.0, 0, { w: 2.2, d: 0.95 });
+    block(8.15, -5.48, 10.35, -4.52, 'meeting-table');
+    // Chairs tucked well under, which is what an unused meeting room looks
+    // like, and keeps them out of everyone's standing ring.
+    put('chair', 8.63, -5.55, PI);
+    put('chair', 9.87, -5.55, PI);
+    put('chair', 8.63, -4.45, 0);
+    put('chair', 9.87, -4.45, 0);
+
+    // ---- cafe and chill zone --------------------------------------------
+    // The counter, its stools and the strip light are the room's; the soft
+    // furniture is here. All of it under a metre tall, all of it south of the
+    // counter, none of it in the aisle.
+    put('rug', 9.6, 3.6, 0, { w: 4.0, d: 2.0 });
+    put('couch-gorilla', 7.7, 4.5, PI);                 // faces back into the room
+    block(6.6, 4.0, 8.8, 5.0, 'couch-gorilla');
+    put('couch-loaf', 11.2, 4.5, PI);
+    block(10.1, 4.0, 12.3, 5.0, 'couch-loaf');
+    put('couch-mod', 9.5, 1.4, 0, { w: 2.0 });          // back to the counter
+    block(8.4, 0.95, 10.6, 1.9, 'couch-mod');
+    put('pouf', 8.6, 3.1, 0);
+    put('pouf', 10.5, 3.0, 0);
+    put('plant-monstera', 12.9, 5.3);
+    block(12.6, 5.0, 13.2, 5.6, 'plant');
+
+    // ---- the vending machine --------------------------------------------
+    // 1.95 m tall, so it is kept out of the camera's throat entirely: east
+    // wall, north of the cafe, facing west into the corridor.
+    put('vending-machine', 13.4, -1.7, -PI / 2);
+    block(12.9, -2.25, 14.0, -1.15, 'vending-machine');
+
+    // ---- the lobby and the far corners ----------------------------------
+    put('plant-snake', 5.2, 7.2);
+    block(4.95, 6.95, 5.45, 7.45, 'plant');
+    put('plant-monstera', -13.3, 7.0);
+    block(-13.6, 6.7, -13.0, 7.3, 'plant');
+    put('plant-snake', -13.4, -7.1);
+    block(-13.65, -7.35, -13.15, -6.85, 'plant');
+
+    return group;
+  }
+
+  // -------------------------------------------------------------------------
+  // The page's own two buttons. Everything else the interface does belongs to
+  // office-ui.js; these are only here because they are page chrome, not room
+  // chrome, and they must never fight the modules that own the camera.
+  // -------------------------------------------------------------------------
+  function wireChrome(OFFICE) {
+    var desk = document.getElementById('btn-desk');
+    var board = document.getElementById('btn-board');
+    if (desk) desk.addEventListener('click', function () {
+      try { if (OFFICE.player && OFFICE.player.goHome) OFFICE.player.goHome(); } catch (e) {}
+    });
+    if (board) board.addEventListener('click', function () {
+      try { if (OFFICE.ui && OFFICE.ui.whiteboard) OFFICE.ui.whiteboard(); } catch (e) {}
+    });
+
+    // Roof deck. Prefer the real ride — doors close, the indicator counts, then
+    // it lands you on /roof — so the button and the lift are the same journey
+    // rather than two different ways up. If arrival is not built yet, or is
+    // already mid-ride, just go: a button that silently does nothing is worse
+    // than one that skips the animation.
+    var roof = document.getElementById('btn-roof');
+    if (roof) roof.addEventListener('click', function () {
+      try {
+        var a = OFFICE.arrival;
+        if (a && a.go && a.state && a.state() === 'idle' && a.go('/roof') !== false) return;
+      } catch (e) {}
+      window.location.href = '/roof';
+    });
+
+    // Typing in a panel must not also walk you into a wall. office-ui shields
+    // its own fields; these two buttons only need to stop holding focus, or
+    // space and enter keep re-triggering them while you are steering.
+    [desk, board, roof].forEach(function (b) {
+      if (b) b.addEventListener('click', function () { b.blur(); });
+    });
+
+    // The landscape gate. A 3D room in a portrait phone window is a corridor.
+    try {
+      if (OFFICE.phone && OFFICE.phone.mountGate) OFFICE.phone.mountGate(document.getElementById('office-gate'));
+    } catch (e) {}
+
+    // Controls card is desktop-only help; hide it once you have clearly got it.
+    var keys = document.getElementById('keys');
+    try {
+      if (OFFICE.core && OFFICE.core.isTouch) document.body.classList.add('is-touch');
+    } catch (e) {}
+    if (keys) {
+      var seen = 0;
+      var hide = function () { if (++seen >= 3) { keys.classList.add('hid'); window.removeEventListener('keydown', hide); } };
+      window.addEventListener('keydown', hide);
+    }
+  }
+
+  // Deferred scripts have all run by DOMContentLoaded, so this is the earliest
+  // moment every module exists AND the boot overlay is in the document.
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a57b809f2d78169c',t:'MTc5NDIxMzUxOQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a57b809f2d78169c',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

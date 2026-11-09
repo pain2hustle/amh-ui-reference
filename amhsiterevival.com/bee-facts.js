@@ -1,0 +1,122 @@
+const beeFacts = [
+  "Honey bees pollinate many fruits, nuts, and vegetables people eat every day.",
+  "A honey bee can visit dozens of flowers on one collection trip.",
+  "Worker bees communicate food locations with a waggle dance.",
+  "Bees see ultraviolet patterns on flowers that humans cannot see.",
+  "A colony can include tens of thousands of bees during peak season.",
+  "Honey is naturally acidic and low in moisture, which helps it keep for a long time.",
+  "Beeswax is made by worker bees and shaped into honeycomb cells.",
+  "Pollinator gardens help bees by giving them food across more of the year.",
+  "Native flowers are often some of the best food sources for local pollinators.",
+  "Avoiding pesticides during bloom helps protect bees while they forage.",
+  "Bees carry pollen in tiny baskets on their hind legs.",
+  "A queen bee can lay many eggs per day when the colony is growing.",
+  "Drones are male bees and do not gather pollen or nectar.",
+  "Worker bees clean, nurse, build, guard, forage, and cool the hive.",
+  "Bees fan their wings to regulate hive temperature.",
+  "Honey bees turn nectar into honey by reducing moisture and adding enzymes.",
+  "A strong hive works like a living superorganism.",
+  "Bees need clean water, especially in hot weather.",
+  "Clover, lavender, borage, mint, and sunflowers can all support pollinators.",
+  "Planting flowers in clusters makes it easier for bees to forage efficiently.",
+  "A bee's wings beat incredibly fast during flight.",
+  "Honeycomb hexagons are strong, efficient, and use very little wax.",
+  "Bees can recognize patterns and colors while foraging.",
+  "Pollinators help wild ecosystems reproduce, not just farms.",
+  "Leaving some yard areas less manicured can help nesting pollinators.",
+  "Different bee species can prefer different flower shapes.",
+  "Honey bees are not the only important bees; native bees matter too.",
+  "Mason bees and leafcutter bees are strong pollinators for many plants.",
+  "Bumble bees can pollinate some flowers by vibration.",
+  "A diverse garden is better than one flower type only.",
+  "Bees use scent to identify flowers, colony members, and hive signals.",
+  "Fresh pollen is a protein source for developing bees.",
+  "Nectar is mostly an energy source for bees.",
+  "A hive entrance can be guarded by worker bees.",
+  "Smoke can calm honey bees by interrupting alarm signals.",
+  "Urban gardens can still be valuable pollinator habitat.",
+  "Flowering herbs can feed bees if allowed to bloom.",
+  "Fruit trees often depend on pollinators for good harvests.",
+  "Some bees nest underground and need bare soil patches.",
+  "Dead wood and hollow stems can shelter some native bees.",
+  "Bees are more active in warm, calm weather.",
+  "Rain and cold can keep foragers inside the hive.",
+  "Honey color and flavor change based on nectar sources.",
+  "A beekeeper checks hive health, brood, stores, and space.",
+  "A crowded hive may prepare to swarm and create a new colony.",
+  "Swarming is natural reproduction for honey bee colonies.",
+  "Pollinator corridors help bees move through cities and neighborhoods.",
+  "Buying local honey can support nearby beekeepers.",
+  "A shallow water dish with stones can give bees a safer drink.",
+  "Single-petal flowers are often easier for bees to access.",
+  "Night lighting can disrupt some pollinators and insects.",
+  "Healthy soil supports healthier flowering plants for bees.",
+  "Bees groom themselves to keep pollen and dust under control.",
+  "Honey bees have five eyes.",
+  "Bees use antennae to smell, touch, and read hive signals.",
+  "A worker bee's job changes as she ages.",
+  "Nurse bees feed young larvae inside the hive.",
+  "Foragers are usually older worker bees.",
+  "Bees can learn which flowers are rewarding.",
+  "Pollen grains stick to bee hairs while they visit flowers.",
+  "Bee-friendly yards can be beautiful and low waste.",
+  "Letting dandelions bloom briefly can help early-season pollinators.",
+  "Many weeds are valuable food plants for bees.",
+  "A hive stores honey as winter energy.",
+  "Bees cluster together for warmth in cold weather.",
+  "Good hive ventilation helps reduce moisture problems.",
+  "Wax moths and mites are common hive challenges.",
+  "Varroa mites are one of the biggest honey bee health threats.",
+  "Strong bee nutrition can improve colony resilience.",
+  "Different nectar sources bloom at different times of year.",
+  "A bee garden should aim for spring, summer, and fall blooms.",
+  "Pesticide-free flowers are safer for pollinators.",
+  "Bees help produce seeds for many flowering plants.",
+  "Some crops need managed pollination to produce at scale.",
+  "Pollinator decline is linked to habitat loss, chemicals, pests, and climate stress.",
+  "Small gardens can add up when many people plant for bees.",
+  "Bees prefer sunny foraging spots protected from strong wind.",
+  "A bee can carry a pollen load that is a major part of its body weight.",
+  "Honey bees use propolis to seal and protect the hive.",
+  "Propolis comes from plant resins collected by bees.",
+  "Comb space helps the colony store honey and raise brood.",
+  "Bees can detect carbon dioxide and hive airflow changes.",
+  "Some flowers guide bees with nectar lines.",
+  "Pollinator-friendly landscaping can reduce lawn maintenance.",
+  "Bees are more likely to sting when defending the hive than while foraging.",
+  "Calm movement around bees is safer than swatting.",
+  "Beekeepers often track hive weight to estimate honey stores.",
+  "A nectar flow is a period when many plants are producing nectar.",
+  "Drought can reduce nectar production in flowers.",
+  "Native shrubs and trees can feed bees as much as flower beds.",
+  "Willow, maple, and fruit blossoms can support early bee activity.",
+  "Bees help connect food, farms, gardens, and wild land.",
+  "A pollinator patch can be started in a pot, balcony, yard, or field.",
+  "Saving bees starts with habitat, clean water, safer planting, and awareness.",
+  "Every bee-friendly flower is a tiny food station.",
+  "A garden with different heights and colors helps more pollinators.",
+  "Bees make landscapes more productive and more alive.",
+  "Protecting pollinators protects future harvests.",
+  "AMH says save the bees and build things that help life thrive.",
+];
+
+function factIndex() {
+  const day = Math.floor(Date.now() / 86400000);
+  return day % beeFacts.length;
+}
+
+function setFact(index = factIndex()) {
+  const fact = beeFacts[index % beeFacts.length];
+  document.querySelectorAll("[data-bee-fact]").forEach((el) => {
+    el.textContent = fact;
+  });
+}
+
+setFact();
+
+document.querySelector("[data-new-fact]")?.addEventListener("click", () => {
+  const next = Math.floor(Math.random() * beeFacts.length);
+  setFact(next);
+});
+
+window.AMHBeeFacts = beeFacts;

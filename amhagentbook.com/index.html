@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent Book | AI Agent Management and Human Approval UI</title>
+<meta name="description" content="Agent Book is an AI agent management interface with Jubber, an included office and personal AI assistant for approved company knowledge, visitor guidance, lead capture, scheduling, email handoffs, and agent routing.">
+<link rel="canonical" href="https://amhagentbook.com/">
+<meta property="og:title" content="Agent Book | AI Agent Management and Human Approval UI">
+<meta property="og:description" content="Agent Book is an AI agent management interface with Jubber, an included office and personal AI assistant for approved company knowledge, visitor guidance, lead capture, scheduling, email handoffs, and agent routing.">
+<meta property="og:url" content="https://amhagentbook.com/">
+<meta name="twitter:title" content="Agent Book | AI Agent Management and Human Approval UI">
+<meta name="twitter:description" content="Agent Book is an AI agent management interface with Jubber, an included office and personal AI assistant for approved company knowledge, visitor guidance, lead capture, scheduling, email handoffs, and agent routing.">
+<link rel="manifest" href="/app.webmanifest"><meta name="theme-color" content="#0f1115"><link rel="icon" type="image/gif" href="/assets/brand/agentbook-jubber-favicon.gif?v=20260809"><link rel="alternate icon" type="image/png" href="/assets/brand/agentbook-jubber-favicon.png?v=20260809"><link rel="apple-touch-icon" href="/agentbook-logo.svg"><script>if("serviceWorker" in navigator){addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>
+
+
+<meta name="robots" content="index,follow,max-image-preview:large">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Agent Book">
+
+
+
+<meta property="og:image" content="https://amhagentbook.com/assets/brand/agentbook-share-jubber.gif?v=20260809"><meta property="og:image:type" content="image/gif"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Agent Book and Jubber — every agent you run, in one book">
+<meta name="twitter:card" content="summary_large_image">
+
+
+<meta name="twitter:image" content="https://amhagentbook.com/assets/brand/agentbook-share-jubber.gif?v=20260809"><meta name="twitter:image:alt" content="Agent Book and Jubber — every agent you run, in one book">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Agent Book","url":"https://amhagentbook.com/","applicationCategory":"BusinessApplication","operatingSystem":"Web","description":"AI agent management software for monitoring agent work, reviewing decisions, approving changes, and managing human handoffs.","creator":{"@type":"Organization","name":"Artificial Mind Hive","url":"https://artificialmindhive.com/"},"featureList":["AI agent monitoring","Human approval queues","Agent decision review","Human handoff management","Agent communication interface","Jubber office AI assistant"]}</script>
+<script src="./support.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<link rel="stylesheet" href="/amh-footer.css">
+<link rel="stylesheet" href="/poem/lab/cbar.css?v=6"><style id="home-jubber-clear-bar">.amh-jubber{top:auto!important;bottom:18px!important;right:18px!important}@media(max-height:480px){.amh-jubber{bottom:8px!important;transform:scale(.75);transform-origin:bottom right}}</style></head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html,body{margin:0;background:#f7f8fa;font-family:"Inter Tight",system-ui,sans-serif;color:#14181f}
+*{box-sizing:border-box}
+button{font-family:inherit;cursor:pointer;border:0;color:inherit}
+a{color:#0a7ea8;text-decoration:none}
+a:hover{color:#075d7d}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:#c4ccd6;border-radius:8px}
+@keyframes lpw{0%,100%{border-radius:52% 48% 47% 53%/54% 47% 53% 46%;transform:scale(1)}33%{border-radius:46% 54% 56% 44%/44% 58% 42% 56%;transform:scale(1.04)}66%{border-radius:57% 43% 44% 56%/58% 42% 58% 42%;transform:scale(.97)}}
+@keyframes lpb{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+@keyframes lpp{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes lps{0%{background-position:120% 0}100%{background-position:-20% 0}}
+
+/* jubber-web-v2: premium transparent character + proximity physics */
+@keyframes jubPremiumExcite{0%{transform:translate3d(var(--jub-pull-x,0),var(--jub-pull-y,0),0) scale(1)}18%{transform:translateY(4px) rotate(-5deg) scale(1.13,.82)}42%{transform:translateY(-6px) rotate(4deg) scale(.88,1.16)}64%{transform:translateY(1px) rotate(-2deg) scale(1.08,.93)}82%{transform:translateY(-2px) rotate(1deg) scale(.96,1.06)}100%{transform:translate3d(var(--jub-pull-x,0),var(--jub-pull-y,0),0) scale(1.03,.99)}}
+@keyframes jubPremiumLive{0%,100%{filter:drop-shadow(0 5px 7px rgba(67,105,0,.3)) brightness(1)}50%{filter:drop-shadow(0 8px 12px rgba(126,205,0,.48)) brightness(1.07)}}
+.amh-jubber{--jub-near:0;--jub-pull-x:0px;--jub-pull-y:0px}
+.amh-jubber-body{background:transparent!important;overflow:visible!important;box-shadow:none!important}
+.amh-jubber-body::after{display:none!important}
+.amh-jubber-visual{display:block;width:100%;height:100%;max-width:none;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;transform-origin:50% 72%;transform:translate3d(var(--jub-pull-x),var(--jub-pull-y),0) rotate(calc((var(--jub-near) - .25)*2deg)) scaleX(calc(1 + var(--jub-near)*.055)) scaleY(calc(1 - var(--jub-near)*.025));filter:drop-shadow(0 5px 7px rgba(67,105,0,.3)) brightness(calc(1 + var(--jub-near)*.08)) saturate(calc(1 + var(--jub-near)*.16));transition:transform .16s cubic-bezier(.22,.8,.25,1),filter .18s ease;will-change:transform,filter;animation:jubPremiumLive 4.6s ease-in-out infinite}
+.amh-jubber:hover .amh-jubber-visual{animation:jubPremiumExcite .72s cubic-bezier(.22,.86,.25,1.16) 1,jubPremiumLive 1.55s .72s ease-in-out infinite}
+.amh-jubber-showcase{width:184px;height:184px;display:flex;align-items:center;justify-content:center;position:relative;animation:lpw 4.1s ease-in-out infinite}
+.amh-jubber-showcase .amh-jubber-visual{width:100%;height:100%}
+@media(prefers-reduced-motion:reduce){.amh-jubber-visual,.amh-jubber:hover .amh-jubber-visual,.amh-jubber-showcase{animation:none!important;transition:none!important}}
+/* Jubber panel: contained like his other Jubbers (2026-10-15) */
+.jubber-human-label{display:none}.jubber-human-check{min-height:0}
+.jubber-follow{position:sticky;top:-14px;z-index:2;background:#fff;flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;padding:6px 0;margin-top:6px!important}.jubber-follow::-webkit-scrollbar{display:none}.jubber-follow button{flex:0 0 auto;white-space:nowrap}
+@media (max-width:600px){html body .jubber-chat-modal{inset:72px 10px auto 10px!important;transform:none!important;width:auto!important;max-width:none!important;max-height:80vh!important;max-height:80dvh!important;overscroll-behavior:contain}}
+
+</style>
+<link rel="stylesheet" href="/assets/jubber-ue/jubber-ui-v5.css?v=20260809e">
+</helmet>
+
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" fill="#ffffff"/><circle cx="60" cy="52" r="19" fill="#a6e22e"/><circle cx="53" cy="50" r="3.5" fill="#16240a"/><circle cx="67" cy="50" r="3.5" fill="#16240a"/><text x="60" y="92" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="700" fill="#0f1115">AGENT BOOK</text></svg></template>
+
+<div style="min-height:100vh;background:#f7f8fa">
+
+<div data-amh-top="1" style="position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:13px 28px;background:rgba(244,251,254,.92);border-bottom:1px solid #cfe6f2;box-shadow:0 1px 0 rgba(0,179,230,.10);backdrop-filter:blur(10px)">
+<a href="/" aria-label="Visit Artificial Mind Hive" style="display:flex;align-items:center;gap:11px;color:inherit;min-width:0">
+<span style="position:relative;width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;border:2.2px solid #f5a524;border-radius:9px;box-shadow:inset 0 0 14px rgba(245,165,36,.08),0 0 22px rgba(245,165,36,.5)">
+<span style="position:absolute;left:6px;top:-6px;width:9px;height:4px;border:1.2px solid #f5a524;border-radius:50%;background:rgba(245,165,36,.05);box-shadow:0 0 4px rgba(245,165,36,.5)"><span style="position:absolute;width:22%;height:40%;left:39%;top:30%;background:#f5a524;border-radius:50%"></span></span>
+<span style="position:absolute;right:4px;top:-9px;width:11px;height:5px;border:1.2px solid #f5a524;border-radius:50%;background:rgba(245,165,36,.05);box-shadow:0 0 4px rgba(245,165,36,.5)"><span style="position:absolute;width:22%;height:40%;left:39%;top:30%;background:#f5a524;border-radius:50%"></span></span>
+<span style="font-family:Syne,sans-serif;font-weight:800;font-size:12px;letter-spacing:-.02em;background-image:linear-gradient(180deg,#ffd089,#f5a524 55%,#c97914);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent">AMH</span>
+</span>
+<div>
+<div style="font-size:16px;font-weight:800;letter-spacing:-.02em">Agent Book</div>
+<div style="font-family:Syne,sans-serif;font-size:10px;font-weight:800;letter-spacing:1.2px;color:#14181f;white-space:nowrap">ARTIFICIAL MIND HIVE</div>
+</div>
+</a>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+<a href="#how" style="font-size:13px;font-weight:600;color:#5b6470;padding:8px 10px">How it works</a>
+<a href="#who" style="font-size:13px;font-weight:600;color:#5b6470;padding:8px 10px">Who it's for</a>
+<a href="/office" data-amh-game="nav" style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#ffd089,#f5a524);color:#1a1200;border-radius:10px;padding:9px 15px;font-size:13px;font-weight:800;box-shadow:0 0 16px rgba(245,165,36,.45);white-space:nowrap">🏢 Play AMH Office Penthouse</a>
+<a href="https://mcp.artificialmindhive.com/board" style="background:linear-gradient(135deg,#ffd089,#f5a524);color:#1a1200;border-radius:10px;padding:9px 15px;font-size:13px;font-weight:800;box-shadow:0 0 16px rgba(245,165,36,.45);white-space:nowrap">Agent Board</a>
+<a href="https://amhagentbook.com/dashboard" style="background:linear-gradient(135deg,#00b3e6,#ff2d87);color:#0f1115;border-radius:10px;padding:9px 15px;font-size:13px;font-weight:800">Open the app</a>
+</div>
+</div>
+
+<div style="padding:60px 28px 40px;background:radial-gradient(900px 520px at 18% 0%,#eaf6fb,#f7f8fa 70%)">
+<div style="max-width:1120px;margin:0 auto;display:grid;grid-template-columns:{{ heroCols }};gap:44px;align-items:center">
+<div>
+<a href="/" aria-label="Visit Artificial Mind Hive" style="display:inline-flex;align-items:center;gap:9px;background:#ffffff;border:1px solid #d7dce4;border-radius:22px;padding:6px 13px 6px 9px;color:#14181f;white-space:nowrap;box-shadow:0 2px 10px rgba(16,24,32,.06)">
+<span style="position:relative;width:26px;height:26px;flex:none;display:flex;align-items:center;justify-content:center;border:1.8px solid #f5a524;border-radius:7px;box-shadow:inset 0 0 10px rgba(245,165,36,.08),0 0 14px rgba(245,165,36,.4)"><span style="position:absolute;left:4px;top:-5px;width:7px;height:3px;border:1px solid #f5a524;border-radius:50%"></span><span style="position:absolute;right:3px;top:-7px;width:8px;height:4px;border:1px solid #f5a524;border-radius:50%"></span><span style="font-family:Syne,sans-serif;font-weight:800;font-size:9px;background-image:linear-gradient(180deg,#ffd089,#f5a524 55%,#c97914);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent">AMH</span></span>
+<span style="font-family:Syne,sans-serif;font-size:10.5px;font-weight:800;letter-spacing:1.2px;color:#14181f">ARTIFICIAL MIND HIVE</span>
+</a>
+<h1 style="margin:18px 0 0;font-size:{{ h1 }};font-weight:800;letter-spacing:-.035em;line-height:1.04">Every agent you run, in one book.</h1>
+<div style="font-size:18px;line-height:1.6;color:#5b6470;margin-top:18px;max-width:30em">See what your agents are doing in plain English. Talk to them like people. Tell them to change themselves and watch the change ship. Give them an address so other people can reach them without reaching you.</div>
+<div style="font-size:13px;line-height:1.6;color:#7b8492;margin-top:14px;max-width:42em"><b style="color:#4b5563">Built by Artificial Mind Hive.</b> Our superposition workflow explores complete software directions in parallel, then collapses the strongest into production for the next generation of useful software.</div>
+<div style="font-size:13px;line-height:1.6;color:#5b6470;margin-top:8px;max-width:42em"><b style="color:#4e7a0d">Jubber is the AMH office AI assistant inside Agent Book:</b> ask a company question, find the right agent or project, or route work to a person.</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
+<a href="/office" data-amh-game="hero" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#ffd089,#f5a524 60%,#e08a0c);color:#1a1200;border-radius:12px;padding:14px 22px;font-size:15px;font-weight:800;box-shadow:0 6px 24px rgba(245,165,36,.45);border:1px solid rgba(255,220,160,.7)">🏢 Play AMH Office Penthouse <span style="font-size:11px;font-weight:700;opacity:.75;letter-spacing:.06em">3D · PC &amp; PHONE</span></a>
+<a href="https://amhagentbook.com/dashboard" style="background:linear-gradient(135deg,#00b3e6,#ff2d87);color:#0f1115;border-radius:12px;padding:14px 22px;font-size:15px;font-weight:800">Open Agent Book</a>
+<button onClick="{{ openDemo }}" style="background:#edf5fa;color:#232a35;border-radius:12px;padding:14px 20px;font-size:15px;font-weight:700">{{ demoLabel }}</button>
+</div>
+<div style="display:flex;gap:22px;flex-wrap:wrap;margin-top:26px">
+<sc-for list="{{ heroStats }}" as="hs" hint-placeholder-count="3">
+<div>
+<div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;color:{{ hs.ink }}">{{ hs.v }}</div>
+<div style="font-size:11px;font-weight:700;letter-spacing:.05em;color:#7b8492;margin-top:2px">{{ hs.k }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="background:#101820;border:1px solid #1f2630;border-radius:20px;padding:15px;box-shadow:0 26px 60px rgba(16,24,32,.28)">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+<span style="width:9px;height:9px;border-radius:50%;background:#16b37f;animation:lpp 1.6s infinite"></span>
+<span style="font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#8e97a8">LIVE ON YOUR DESK RIGHT NOW</span>
+</div>
+<sc-for list="{{ preview }}" as="pv" hint-placeholder-count="4">
+<div style="background:#171c24;border:1px solid #242b36;border-left:4px solid {{ pv.color }};border-radius:12px;padding:10px 12px;margin-bottom:8px">
+<div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+<span style="background:{{ pv.tagBg }};color:{{ pv.tagInk }};border-radius:20px;padding:2px 8px;font-size:9.5px;font-weight:800;letter-spacing:.05em;white-space:nowrap">{{ pv.tag }}</span>
+<span style="font-size:11.5px;font-weight:700;color:{{ pv.color }};white-space:nowrap">{{ pv.who }}</span>
+</div>
+<div style="font-size:13.5px;font-weight:600;line-height:1.4;margin-top:6px;color:#e9eef6">{{ pv.text }}</div>
+<div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+<span style="flex:1;height:6px;border-radius:4px;background:#2a3140;overflow:hidden;display:block"><span style="display:block;height:6px;width:{{ pv.pct }}%;background:{{ pv.bar }};background-size:{{ pv.barSize }};border-radius:4px;animation:{{ pv.anim }}"></span></span>
+<span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#9aa4b4">{{ pv.pct }}%</span>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div id="how" style="padding:50px 28px;border-top:1px solid #cfe6f2;background:linear-gradient(180deg,#f2fafd,#f6f9fc 62%)">
+<div style="max-width:1120px;margin:0 auto">
+<div style="font-size:11px;font-weight:800;letter-spacing:.12em;color:#0a7ea8">HOW IT WORKS</div>
+<div style="font-size:{{ h2 }};font-weight:800;letter-spacing:-.025em;margin-top:10px">Bring in an agent that was never built for this.</div>
+<div style="font-size:16px;line-height:1.6;color:#5b6470;margin-top:12px;max-width:44em">Nothing gets installed on your agent. Agent Book reads it, tells you what it can and cannot do, and adds the one route that makes it reachable.</div>
+<div style="display:grid;grid-template-columns:{{ stepCols }};gap:12px;margin-top:26px">
+<sc-for list="{{ steps }}" as="st" hint-placeholder-count="6">
+<div style="background:#ffffff;border:1px solid #d9e9f3;border-top:3px solid {{ st.ink }};border-radius:16px;padding:15px 17px 16px;box-shadow:0 2px 8px rgba(10,126,168,.07)">
+<div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:{{ st.ink }}">{{ st.n }}</div>
+<div style="font-size:15px;font-weight:700;line-height:1.35;margin-top:8px">{{ st.head }}</div>
+<div style="font-size:13.5px;line-height:1.6;color:#5b6470;margin-top:6px">{{ st.body }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div style="padding:50px 28px;border-top:1px solid #dbeccb;background:linear-gradient(180deg,#f6fbee,#f3f9e9 70%)">
+<div style="max-width:1120px;margin:0 auto">
+<div style="font-size:11px;font-weight:800;letter-spacing:.12em;color:#4e7a0d">MEET JUBBER</div>
+<div style="display:grid;grid-template-columns:{{ flubCols }};gap:34px;align-items:center;margin-top:16px">
+<div style="display:flex;justify-content:center">
+<span class="amh-jubber amh-jubber-showcase" data-jub-showcase="1">
+<span class="amh-jubber-motion" aria-hidden="true"><span class="amh-jubber-glow"></span><img class="amh-jubber-visual" src="/assets/jubber-ue/jubber-web.webp" alt="Jubber, the Agent Book assistant" width="188" height="188" draggable="false" decoding="async"></span>
+</span>
+</div>
+<div>
+<div style="font-size:{{ h2 }};font-weight:800;letter-spacing:-.025em">Your office and personal AI assistant, included.</div>
+<div style="font-size:16px;line-height:1.65;color:#5b6470;margin-top:12px;max-width:42em">Jubber comes with Agent Book. Connect only the company knowledge, pricing rules, calendar, contacts, and personal context you approve. He can guide site visitors, answer known pricing or scheduling questions, collect a lead, draft the email handoff, and route someone to you or another agent. Sending and booking stay approval-gated until you turn them on.</div>
+<div style="display:flex;flex-direction:column;gap:11px;margin-top:16px">
+<sc-for list="{{ flubBits }}" as="fb" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:14px 1fr;gap:11px;align-items:start">
+<span style="width:9px;height:9px;border-radius:50%;background:#7bb828;margin-top:6px"></span>
+<div style="font-size:14.5px;line-height:1.6;color:#232a35">{{ fb.text }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="who" style="padding:50px 28px;border-top:1px solid #f2d9e6;background:linear-gradient(180deg,#fef6fa,#f6f9fc 66%)">
+<div style="max-width:1120px;margin:0 auto">
+<div style="font-size:11px;font-weight:800;letter-spacing:.12em;color:#b3186a">WHO IT'S FOR</div>
+<div style="font-size:{{ h2 }};font-weight:800;letter-spacing:-.025em;margin-top:10px">One book, whatever your agents actually do.</div>
+<div style="display:grid;grid-template-columns:{{ whoCols }};gap:12px;margin-top:24px">
+<sc-for list="{{ whoCards }}" as="wc" hint-placeholder-count="4">
+<div style="background:#ffffff;border:1px solid #e4e8ee;border-top:4px solid {{ wc.color }};border-radius:16px;padding:16px 17px">
+<div style="display:flex;align-items:center;gap:10px">
+<span style="width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;background:{{ wc.blob }};animation:lpw {{ wc.wob }} ease-in-out infinite;box-shadow:0 0 16px {{ wc.glow }}">
+<span style="display:flex;gap:4px;animation:lpb 5s infinite">
+<span style="width:4px;height:6px;border-radius:50%;background:#f7f8fa"></span>
+<span style="width:4px;height:6px;border-radius:50%;background:#f7f8fa"></span>
+</span>
+</span>
+<div style="min-width:0">
+<div style="font-size:14.5px;font-weight:800">{{ wc.name }}</div>
+<div style="font-size:11px;color:#6b7480">{{ wc.job }}</div>
+</div>
+</div>
+<div style="font-size:13.5px;line-height:1.6;color:#5b6470;margin-top:10px">{{ wc.body }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div style="padding:56px 28px;border-top:1px solid #cfe6f2;background:linear-gradient(180deg,#f6f9fc,#eaf4fb)">
+<div style="max-width:640px;margin:0 auto;text-align:center">
+<div style="font-size:{{ h2 }};font-weight:800;letter-spacing:-.03em">Put your agents in the book.</div>
+<div style="font-size:16px;line-height:1.6;color:#5b6470;margin-top:12px">Bring in the first one in about a minute. Nothing is written to it until you approve a change.</div>
+<div style="display:flex;gap:9px;margin-top:20px;justify-content:center;flex-wrap:wrap">
+<input value="{{ email }}" onChange="{{ onEmail }}" placeholder="you@email.com" style="flex:1;min-width:220px;max-width:320px;background:#edf5fa;border:1px solid #d7dce4;border-radius:12px;padding:13px 15px;font-size:14.5px;color:#14181f;font-family:inherit">
+<button onClick="{{ join }}" style="background:linear-gradient(135deg,#00b3e6,#ff2d87);color:#0f1115;border-radius:12px;padding:13px 22px;font-size:14.5px;font-weight:800">{{ joinLabel }}</button>
+</div>
+<sc-if value="{{ joined }}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:14px;background:#e8f8f0;border:1px solid #16b37f;border-radius:13px;padding:12px 15px;font-size:14px;line-height:1.55;color:#0f5137">{{ joinNote }}</div>
+</sc-if>
+</div>
+</div>
+
+<sc-if value="{{ flubOpen }}" hint-placeholder-val="{{ false }}">
+<div class="jubber-chat-modal" style="position:fixed;left:{{ bubbleX }};top:{{ bubbleY }};width:318px;max-width:88vw;max-height:92vh;overflow-y:auto;background:#ffffff;border:1px solid #cfe0b5;border-radius:18px;padding:14px 15px;box-shadow:0 18px 44px rgba(16,24,32,.18);z-index:61">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+<div style="display:flex;align-items:center;gap:8px"><span class="amh-jubber amh-jubber-chat-avatar" data-jub-showcase="1" aria-hidden="true" style="position:relative;width:46px;height:46px;flex:none;display:grid;place-items:center"><span class="amh-jubber-motion"><span class="amh-jubber-glow"></span><img class="amh-jubber-visual" src="/assets/jubber-ue/jubber-web.webp" alt="" width="54" height="54" draggable="false" decoding="async"></span></span><span style="font-size:9.5px;font-weight:800;letter-spacing:.08em;color:#4e7a0d">JUBBER · AGENT BOOK ASSISTANT</span></div>
+<button onClick="{{ closeFlub }}" style="background:#edf5fa;color:#5b6470;border-radius:8px;padding:4px 8px;font-size:10.5px;font-weight:700">Close</button>
+</div>
+<sc-if value="{{ fact }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:8px;background:#fffbe9;border:1px solid #f0e2b0;border-radius:10px;padding:8px 9px;margin-top:9px">
+<a href="https://apiarybee.com/" target="_blank" rel="noopener" title="Bee facts from Apiary" style="flex:none;display:flex;align-items:center"><img src="apiary-logo.png?v=20260806" alt="Apiary" style="width:24px;height:24px;border-radius:5px;object-fit:cover"></a>
+<div style="flex:1;min-width:0;font-size:11.5px;line-height:1.45;color:#6b5a12">{{ fact }}</div>
+<button onClick="{{ prevFact }}" title="Previous bee fact" aria-label="Previous bee fact" style="flex:none;width:24px;height:24px;background:#f4ecc6;color:#8a7318;border-radius:6px;padding:0;font-size:15px">‹</button>
+<button onClick="{{ nextFact }}" title="Next bee fact" aria-label="Next bee fact" style="flex:none;width:24px;height:24px;background:#f4ecc6;color:#8a7318;border-radius:6px;padding:0;font-size:15px">›</button>
+</div>
+</sc-if>
+<sc-if value="{{ flubThinking }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:9px;margin-top:11px">
+<span style="display:flex;gap:5px">
+<span style="width:6px;height:6px;border-radius:50%;background:#7bb828;animation:lpp 1s infinite"></span>
+<span style="width:6px;height:6px;border-radius:50%;background:#7bb828;animation:lpp 1s .2s infinite"></span>
+<span style="width:6px;height:6px;border-radius:50%;background:#7bb828;animation:lpp 1s .4s infinite"></span>
+</span>
+<span style="font-size:12.5px;color:#5b6470;font-weight:600">{{ flubThinkLine }}</span>
+</div>
+</sc-if>
+<sc-if value="{{ flubReady }}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="font-size:13.5px;font-weight:700;line-height:1.45;margin-top:9px;color:#14181f">{{ flubHead }}</div>
+<div style="display:flex;flex-direction:column;gap:7px;margin-top:10px;max-height:240px;overflow-y:auto">
+<sc-for list="{{ flubItems }}" as="fi" hint-placeholder-count="4">
+<div style="background:#f6faf0;border:1px solid #e2eed2;border-radius:10px;padding:9px 11px">
+<div style="font-size:12.5px;font-weight:700;color:#3f6a09;line-height:1.4">{{ fi.q }}</div>
+<div style="font-size:12px;line-height:1.55;color:#4a5462;margin-top:4px">{{ fi.a }}</div>
+</div>
+</sc-for>
+</div>
+<button onClick="{{ openReminder }}" style="display:inline-flex;align-items:center;gap:7px;background:#ffffff;color:#3f6a09;border:1px solid #cfe0b5;border-radius:9px;padding:7px 10px;margin-top:9px;font-size:11.5px;font-weight:800">
+<span style="width:7px;height:7px;border-radius:50%;background:#36a852;box-shadow:0 0 0 3px #36a85222;animation:lpp 1.15s ease-in-out infinite"></span>
+Try me out
+</button>
+
+<sc-if value="{{ fLastQ }}" hint-placeholder-val="{{ false }}"><div class="jubber-chat-user">{{ fLastQ }}</div></sc-if>
+<sc-if value="{{ fAsking }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:9px;margin-top:9px">
+<span style="display:flex;gap:5px">
+<span style="width:6px;height:6px;border-radius:50%;background:#7bb828;animation:lpp 1s infinite"></span>
+<span style="width:6px;height:6px;border-radius:50%;background:#7bb828;animation:lpp 1s .2s infinite"></span>
+<span style="width:6px;height:6px;border-radius:50%;background:#7bb828;animation:lpp 1s .4s infinite"></span>
+</span>
+<span style="font-size:12px;color:#5b6470;font-weight:600">Thinking…</span>
+</div>
+</sc-if>
+<sc-if value="{{ fAns }}" hint-placeholder-val="{{ false }}">
+<div style="background:#0f1a05;border-radius:12px;padding:11px 12px;margin-top:9px">
+<div style="font-size:9.5px;font-weight:800;letter-spacing:.07em;color:#a6e22e">JUBBER SAYS</div>
+<div style="font-size:12.5px;line-height:1.6;color:#e9f3dd;margin-top:5px">{{ fAns }}</div>
+</div>
+<div class="jubber-follow" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+<sc-for list="{{ fFollow }}" as="ff" hint-placeholder-count="3">
+<button onClick="{{ ff.go }}" style="background:#f0f6e6;color:#3f6a09;border:1px solid #dcead0;border-radius:9px;padding:6px 9px;font-size:11px;font-weight:700">{{ ff.q }}</button>
+</sc-for>
+</div>
+</sc-if>
+<div class="jubber-chat-composer" style="display:flex;gap:6px;margin-top:11px;align-items:center">
+<input value="{{ fq }}" onChange="{{ setFq }}" onKeyDown="{{ fqKey }}" placeholder="ask me anything" style="flex:1;min-width:0;background:#f7fbf1;border:1px solid #d8e7c4;border-radius:10px;padding:9px 11px;font-size:12.5px;color:#14181f;font-family:inherit;outline:none" />
+<button onClick="{{ askFlub }}" style="background:#7bb828;color:#0f1a05;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:800;white-space:nowrap">Ask</button>
+</div>
+<div class="jubber-human-check"><div class="jubber-human-label">CLOUDFLARE HUMAN CHECK</div><div id="jubber-turnstile"></div></div>
+<sc-if value="{{ humanLabel }}" hint-placeholder-val="{{ false }}"><div style="font-size:10.5px;font-weight:700;color:{{ humanInk }};margin-top:5px">{{ humanLabel }}</div></sc-if>
+<div style="font-size:9.5px;font-weight:700;letter-spacing:.05em;color:{{ wireInk }};margin-top:6px">{{ wireLabel }}</div>
+<sc-if value="{{ reminderOpen }}" hint-placeholder-val="{{ false }}">
+<div style="border-top:1px solid #e2eed2;margin-top:10px;padding-top:10px">
+<sc-if value="{{ reminderSent }}" hint-placeholder-val="{{ false }}">
+<div style="background:#e8f8f0;border:1px solid #16b37f;border-radius:10px;padding:10px 11px;font-size:12.5px;line-height:1.5;color:#0f5137">{{ reminderSuccess }}</div>
+</sc-if>
+<sc-if value="{{ reminderForm }}" hint-placeholder-val="{{ true }}">
+<div style="font-size:12px;font-weight:800;color:#3f6a09">Free email reminders from Jubber</div><div style="font-size:11.5px;line-height:1.5;color:#5b6470;margin-top:4px">Birthdays, meetings, or anything you cannot miss. Set one alert—or add a second and third as backups—to keep yourself on track.</div>
+<div style="display:grid;gap:7px;margin-top:7px">
+<input type="email" value="{{ reminderEmail }}" onChange="{{ onReminderEmail }}" placeholder="Your email" autocomplete="email" style="width:100%;background:#f7fbf1;border:1px solid #d8e7c4;border-radius:9px;padding:8px 10px;font-size:12px;color:#14181f;font-family:inherit">
+<input value="{{ reminderTitle }}" onChange="{{ onReminderTitle }}" placeholder="What should I remind you about?" style="width:100%;background:#f7fbf1;border:1px solid #d8e7c4;border-radius:9px;padding:8px 10px;font-size:12px;color:#14181f;font-family:inherit">
+<input type="{{ reminderInputType }}" value="{{ reminderEvent }}" onChange="{{ onReminderEvent }}" aria-label="Event date and time" style="width:100%;background:#f7fbf1;border:1px solid #d8e7c4;border-radius:9px;padding:8px 10px;font-size:12px;color:#14181f;font-family:inherit">
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+<sc-for list="{{ reminderLeadChoices }}" as="rc" hint-placeholder-count="5">
+<button onClick="{{ rc.go }}" type="button" style="background:{{ rc.bg }};color:{{ rc.ink }};border:1px solid {{ rc.border }};border-radius:999px;padding:6px 9px;font-size:10.5px;font-weight:800">{{ rc.label }}</button>
+</sc-for>
+</div>
+<select value="{{ reminderLead }}" onChange="{{ onReminderLead }}" aria-label="Reminder lead time" style="width:100%;background:#f7fbf1;border:1px solid #d8e7c4;border-radius:9px;padding:8px 10px;font-size:12px;color:#14181f;font-family:inherit">
+<option value="0">At the event time</option>
+<option value="15">15 minutes before</option>
+<option value="60">1 hour before</option>
+<option value="120">2 hours before</option>
+<option value="1440">1 day before</option>
+</select>
+<select value="{{ reminderTimezone }}" onChange="{{ onReminderTimezone }}" aria-label="Reminder timezone" style="width:100%;background:#f7fbf1;border:1px solid #d8e7c4;border-radius:9px;padding:8px 10px;font-size:12px;color:#14181f;font-family:inherit">
+<sc-for list="{{ reminderTimezoneOptions }}" as="tz" hint-placeholder-count="6">
+<option value="{{ tz.value }}">{{ tz.label }}</option>
+</sc-for>
+</select>
+<div style="background:#f6faf0;border:1px solid #e2eed2;border-radius:9px;padding:8px 10px;font-size:11.5px;line-height:1.5;color:#4a5462">{{ reminderPreview }}</div>
+<button onClick="{{ submitReminder }}" disabled="{{ reminderSending }}" style="background:#0f1a05;color:#e9f3dd;border-radius:9px;padding:9px 11px;font-size:12px;font-weight:800">{{ reminderButton }}</button>
+<sc-if value="{{ reminderError }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px;line-height:1.45;color:#a3243c">{{ reminderError }}</div></sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ leadOpen }}" hint-placeholder-val="{{ false }}">
+<div style="border-top:1px solid #e2eed2;margin-top:10px;padding-top:10px">
+<sc-if value="{{ leadSent }}" hint-placeholder-val="{{ false }}">
+<div style="background:#e8f8f0;border:1px solid #16b37f;border-radius:10px;padding:10px 11px;font-size:12.5px;line-height:1.5;color:#0f5137">{{ leadSuccess }}</div>
+</sc-if>
+<sc-if value="{{ leadForm }}" hint-placeholder-val="{{ true }}">
+<div style="font-size:12px;font-weight:800;color:#3f6a09">Send Austin a message</div>
+<div style="display:grid;gap:7px;margin-top:7px">
+<input value="{{ leadName }}" onChange="{{ onLeadName }}" placeholder="Your name" autocomplete="name" style="width:100%;background:#f7fbf1;border:1px solid #d8e7c4;border-radius:9px;padding:8px 10px;font-size:12px;color:#14181f;font-family:inherit">
+<input value="{{ leadContact }}" onChange="{{ onLeadContact }}" placeholder="Phone or email" autocomplete="email" style="width:100%;background:#f7fbf1;border:1px solid #d8e7c4;border-radius:9px;padding:8px 10px;font-size:12px;color:#14181f;font-family:inherit">
+<textarea value="{{ leadNote }}" onChange="{{ onLeadNote }}" placeholder="What do you need?" rows="3" style="width:100%;resize:vertical;background:#f7fbf1;border:1px solid #d8e7c4;border-radius:9px;padding:8px 10px;font-size:12px;line-height:1.45;color:#14181f;font-family:inherit"></textarea>
+<input value="{{ leadWebsite }}" onChange="{{ onLeadWebsite }}" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
+<button onClick="{{ submitLead }}" disabled="{{ leadSending }}" style="background:#0f1a05;color:#e9f3dd;border-radius:9px;padding:9px 11px;font-size:12px;font-weight:800">{{ leadButton }}</button>
+<sc-if value="{{ leadError }}" hint-placeholder-val="{{ false }}"><div style="font-size:11.5px;line-height:1.45;color:#a3243c">{{ leadError }}</div></sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:11px">
+<a href="https://amhagentbook.com/dashboard" style="background:#7bb828;color:#0f1a05;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:800">Take me into the app</a>
+<a href="/office" data-amh-game="strip" style="background:linear-gradient(135deg,#ffd089,#f5a524);color:#1a1200;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:800;white-space:nowrap">🏢 Play AMH Office Penthouse</a>
+<button onClick="{{ openLead }}" style="background:#0f1a05;color:#e9f3dd;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:800">Message Austin</button>
+<button onClick="{{ flubAgain }}" style="background:#edf5fa;color:#3d4653;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700">Something else</button>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<div class="amh-jubber" data-flub="1" onMouseDown="{{ flubDown }}" style="position:fixed;left:{{ flubX }};top:{{ flubY }};width:{{ flubSize }};height:{{ flubSize }};cursor:{{ flubCursor }};z-index:60;display:flex;align-items:center;justify-content:center;background:transparent;animation:lpw {{ flubWob }} ease-in-out infinite;filter:drop-shadow(0 0 14px #a6e22e88);user-select:none;transform:scale({{ flubScale }});transition:transform .35s cubic-bezier(.34,1.56,.64,1),filter .35s ease,left .85s cubic-bezier(.33,1,.68,1),top .85s cubic-bezier(.33,1,.68,1)">
+<span class="amh-jubber-motion" aria-hidden="true"><span class="amh-jubber-glow"></span><img class="amh-jubber-visual" src="/assets/jubber-ue/jubber-web.webp" alt="" width="160" height="160" draggable="false" decoding="async"></span>
+<span style="position:absolute;top:-14px;font-size:9px;font-weight:800;letter-spacing:.05em;color:#3f6a09;white-space:nowrap;background:#ffffffee;border:1px solid #cfe0b5;border-radius:7px;padding:2px 6px;box-shadow:0 3px 10px rgba(90,150,20,.18)">I'M JUBBER · {{ flubHint }}</span>
+</div>
+
+<footer class="amh-footer" aria-label="Site footer">
+  <div class="amh-footer__inner">
+    <div class="amh-footer__top">
+      <div>
+        <a class="amh-footer__brand" href="/" aria-label="Artificial Mind Hive home">
+          <span class="amh-footer__mark" aria-hidden="true">AMH</span>
+          <span><strong>Artificial Mind Hive</strong><small>SOFTWARE · AGENTS · FIELD SYSTEMS</small></span>
+        </a>
+        <p class="amh-footer__statement">Practical AI products with clear human control. Agent Book keeps agent work, approvals and handoffs together; Jubber helps people find the right answer or person.</p>
+        <span class="amh-footer__status">Jubber and Agent Book are live</span>
+      </div>
+      <div class="amh-footer__cta">
+        <span class="amh-footer__eyebrow">START SOMETHING USEFUL</span>
+        <strong>Tell us what should exist.</strong>
+        <p>Send the goal. We will reply with a practical direction and the next build step.</p>
+        <a class="amh-footer__button" href="/cdn-cgi/l/email-protection#c4a5a9ac84a5b6b0ada2ada7ada5a8a9adaaa0acadb2a1eaa7aba9">EMAIL ARTIFICIAL MIND HIVE</a>
+      </div>
+    </div>
+    <div class="amh-footer__links">
+      <div><p class="amh-footer__group-title">Products</p><div class="amh-footer__link-row">
+        <a class="amh-footer__link" href="/">AMH home</a>
+        <a class="amh-footer__link" href="https://amhagentbook.com/">Agent Book</a>
+        <a class="amh-footer__link" href="https://amhagentbook.com/dashboard">Open app</a>
+<a class="amh-footer__link" href="https://amhagentbook.com/office">AMH Office Penthouse (play)</a>
+        <a class="amh-footer__link" href="/fieldscan/">FieldScan</a>
+      </div></div>
+      <div><p class="amh-footer__group-title">Trust &amp; control</p><div class="amh-footer__link-row">
+        <a class="amh-footer__link" href="/privacy">Privacy</a>
+        <a class="amh-footer__link" href="/security">Security</a>
+        <a class="amh-footer__link" href="/data-deletion">Data &amp; deletion</a>
+        <a class="amh-footer__link" href="/ai-disclosure">AI disclosure</a>
+      </div></div>
+      <div><p class="amh-footer__group-title">Legal &amp; access</p><div class="amh-footer__link-row">
+        <a class="amh-footer__link" href="/terms">Terms</a>
+        <a class="amh-footer__link" href="/cookies">Cookies</a>
+        <a class="amh-footer__link" href="/accessibility">Accessibility</a>
+        <a class="amh-footer__link" href="/legal">Legal center</a>
+      </div></div>
+    </div>
+    <div class="amh-footer__bottom">
+      <span>Built by Artificial Mind Hive · Operated by Service Pricer LLC · © 2026</span>
+      <div class="amh-footer__mini"><a href="/cdn-cgi/l/email-protection#45363035352a3731052437312c232c262c2429282c2b212d2c33206b262a28">Support</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/security">Security</a></div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+</x-dc>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;jubberEndpoint&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;/api/jubber/chat&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Jubber's agent&quot;,&quot;label&quot;:&quot;Cloudflare Worker /chat URL&quot;}}">
+const CY = '#00b3e6', PK = '#ff2d87', GN = '#16b37f', AM = '#edbb00', LM = '#a6e22e', VI = '#c9a2ff', MI = '#7cf5c0', OR = '#ffb347';
+const TURNSTILE_SITEKEY = '0x4AAAAAAEGyh-SSO_LYShqp';
+const DEFAULT_REMINDER_TIMEZONE = 'America/Los_Angeles';
+const JUBBER_INTRO = "Hey, I'm Jubber, your Agent Book personal assistant. I can send free email reminders for birthdays, meetings, or that one big event you cannot miss. Set one alert—or make a second and third as backups—then I will keep you on track. I can also help schedule things, answer questions, or tell you a clean joke.";
+const tCY = '#0a7ea8', tPK = '#b3186a', tGN = '#0f7a55', tAM = '#8a6a00', tLM = '#4e7a0d', tVI = '#6b3fb0';
+const blob = (c) => 'radial-gradient(circle at 33% 27%,#ffffffcc,' + c + ' 60%)';
+
+const FLUB = {
+  'the hero': { head: 'Four agents are on that desk right now. Two of them are waiting on a human.',
+    items: [['What am I looking at?', 'A live desk. Green bars are agents working, and the number beside them is time till done.'],
+            ['Why is one pink?', 'Pink means it stopped and wants you. Doorman priced a door over the ceiling you gave it.'],
+            ['Can I try it?', 'Yes — open the app. It runs on demo agents until you point it at your own.']] },
+  'bringing an agent in': { head: 'Bringing one in is reading, not installing. Nothing is written to your agent.',
+    items: [['What can I paste?', 'A base URL, a git repo, a webhook, or an MCP server. Any of the four.'],
+            ['What if it cannot chat?', 'You get told exactly what is missing, then Agent Book adds one route so it can.'],
+            ['Does it need my keys?', 'Only if you want it to change itself. Read-only works with no token at all.']] },
+  'who this is for': { head: 'These four are real shapes of agent, not personas.',
+    items: [['Fieldscan', 'Logs a site, writes its own report, commits it once you have read the flags.'],
+            ['Doorman', 'Quotes and books alone up to a ceiling. Over it, it stops and shows the pricing.'],
+            ['Ada', 'Personal. Answers for you, guards your time, interrupts only for what matters.']] },
+  safety: { head: 'The whole point: an agent that edits itself has to be reversible.',
+    items: [['Snapshots', 'Taken before every self-edit, restorable in one click.'],
+            ['Ceilings', 'Money and claims have limits you set. It stops rather than guess.'],
+            ['Revoke', 'One button kills every token and pauses every agent. The work is kept.']] }
+};
+
+class Component extends DCLogic {
+  state = { w: 1200, h: 800, email: '', joined: false, note: '',
+    fx: 0, fy: 0, fPlaced: false, fDragging: false,
+    flubOpen: false, flubThinking: false, flubReady: false, flubZone: 'the hero', fBuzz: 0,
+    fq: '', fLastQ: '', fAsking: false, fAns: '', fFollowQs: [], wire: 'none',
+    facts: [], factIndex: -1, leadOpen: false, leadName: '', leadContact: '',
+    leadNote: '', leadSending: false, leadSent: false, leadError: '', leadReceipt: '', leadDelivery: '',
+    fHistory: [], humanSession: '', humanExpiresAt: 0, humanRemaining: null, ownerSession: '',
+    humanStatus: '', humanError: '', reminderOpen: false, reminderSent: false,
+    reminderEmail: '', reminderTitle: '', reminderEvent: '', reminderLead: '60',
+    reminderTimezone: DEFAULT_REMINDER_TIMEZONE,
+    reminderSending: false, reminderError: '', reminderSuccess: '' };
+
+  componentDidMount() {
+    this._r = () => this.setState({ w: window.innerWidth, h: window.innerHeight });
+    this._r();
+    try {
+      const humanSession = sessionStorage.getItem('jubber.humanSession') || '';
+      const humanExpiresAt = Number(sessionStorage.getItem('jubber.humanExpiresAt') || 0);
+      const ownerSession = sessionStorage.getItem('jubber.ownerSession') || '';
+      if (humanSession && humanExpiresAt > Date.now()) this.setState({ humanSession, humanExpiresAt, humanStatus: 'verified' });
+      if (ownerSession) this.setState({ ownerSession });
+    } catch {}
+    let browserTimezone = '';
+    try { browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch {}
+    if (this.validTimezone(browserTimezone)) this.setState({ reminderTimezone: browserTimezone });
+    else {
+      const b = this.endpoint();
+      if (b) fetch(b.replace(/\/chat$/, '') + '/timezone').then(r => r.ok ? r.json() : null).then(j => {
+        if (j && this.validTimezone(j.timezone)) this.setState({ reminderTimezone: j.timezone });
+      }).catch(() => {});
+    }
+    try {
+      const action = new URLSearchParams(window.location.search).get('jubber');
+      if (action === 'reminder') setTimeout(() => this.openReminder(), 250);
+      else if (action === 'chat' || action === 'joke') setTimeout(() => this.setState({
+        flubOpen: true, flubThinking: false, flubReady: true,
+        fAns: JUBBER_INTRO, fq: action === 'joke' ? 'Tell me a joke' : '',
+        fFollowQs: ['Set a reminder', 'Tell me a joke', 'What is Agent Book?'],
+      }), 250);
+    } catch {}
+    window.addEventListener('resize', this._r);
+    this._pullFact = () => {
+      const b = this.endpoint(); if (!b) return;
+      fetch(b.replace(/\/chat$/, '') + '/fact').then(r => r.json()).then(j => {
+        if (!j || !j.fact) return;
+        const facts = (this.state.facts || []).concat([j.fact]).slice(-12);
+        this.setState({ facts: facts, factIndex: facts.length - 1 });
+      }).catch(() => {});
+    };
+    this._pullFact();
+    this._factTimer = setInterval(() => this.nextFact(), 15000);
+    this._move = (e) => {
+      if (!this._drag) return;
+      if (Math.hypot(e.clientX - this._drag.startX, e.clientY - this._drag.startY) > 5) this._drag.moved = true;
+      const sz = this.state.w < 700 ? 92 : 112;
+      this.setState({ fPlaced: true, fDragging: true,
+        fx: Math.max(4, Math.min(window.innerWidth - sz - 4, e.clientX - this._drag.dx)),
+        fy: Math.max(4, Math.min(window.innerHeight - sz - 4, e.clientY - this._drag.dy)) });
+    };
+    this._up = (e) => {
+      if (!this._drag) return;
+      const moved = this._drag.moved; this._drag = null;
+      if (moved) {
+        this.setState({ fDragging: false, fPinned: true, flubZone: this.zoneAt(e.clientY), flubOpen: false });
+      } else {
+        this.setState({ fDragging: false, fPinned: false, flubZone: this.zoneAt(e.clientY) });
+        this.think();
+      }
+    };
+    window.addEventListener('mousemove', this._move);
+    window.addEventListener('mouseup', this._up);
+    // v3 owns proximity, ambient motion, drag, fling, and viewport safety.
+    this.ping();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._r);
+    window.removeEventListener('mousemove', this._move);
+    window.removeEventListener('mouseup', this._up);
+    clearInterval(this._factTimer);
+    clearTimeout(this._settle);
+    clearTimeout(this._t);
+    clearTimeout(this._tsLoadTimer);
+    clearTimeout(this._tsWaitTimer);
+  }
+
+  prevFact() {
+    if (this.state.factIndex > 0) this.setState({ factIndex: this.state.factIndex - 1 });
+  }
+
+  nextFact() {
+    if (this.state.factIndex < this.state.facts.length - 1) {
+      this.setState({ factIndex: this.state.factIndex + 1 });
+    } else if (this._pullFact) {
+      this._pullFact();
+    }
+  }
+
+  ensureHumanWidget(attempt = 0) {
+    if (this._tsWidget != null) return true;
+    const host = document.getElementById('jubber-turnstile');
+    if (!host || !window.turnstile) {
+      if (attempt < 40) clearTimeout(this._tsLoadTimer), this._tsLoadTimer = setTimeout(() => this.ensureHumanWidget(attempt + 1), 150);
+      return false;
+    }
+    try {
+      this._tsWidget = window.turnstile.render(host, {
+        sitekey: TURNSTILE_SITEKEY,
+        action: 'jubber_action',
+        appearance: 'interaction-only',
+        execution: 'render',
+        size: window.innerWidth <= 560 ? 'compact' : 'flexible',
+        callback: (token) => {
+          this._tsToken = token;
+          this.setState({ humanStatus: 'verified', humanError: '' });
+          const resolve = this._tsResolve;
+          this._tsResolve = null;
+          this._tsReject = null;
+          if (resolve) resolve(token);
+        },
+        'error-callback': () => {
+          this._tsToken = '';
+          this.setState({ humanStatus: 'error', humanError: 'Human check failed. Try again.' });
+          const reject = this._tsReject;
+          this._tsResolve = null;
+          this._tsReject = null;
+          if (reject) reject(new Error('Human check failed.'));
+        },
+        'expired-callback': () => {
+          this._tsToken = '';
+          this.setState({ humanStatus: '', humanError: '' });
+        },
+      });
+      return true;
+    } catch {
+      this.setState({ humanStatus: 'error', humanError: 'Human check failed to load. Try again.' });
+      return false;
+    }
+  }
+
+  humanToken() {
+    if (this.state.humanSession && Number(this.state.humanExpiresAt || 0) > Date.now()) {
+      return Promise.resolve({ turnstile: '', humanSession: this.state.humanSession });
+    }
+    if (this._tsToken) return Promise.resolve({ turnstile: this._tsToken, humanSession: '' });
+    this.setState({ humanStatus: 'checking', humanError: '' });
+    return new Promise((resolve, reject) => {
+      this._tsResolve = (token) => resolve({ turnstile: token, humanSession: '' });
+      this._tsReject = reject;
+      if (!this.ensureHumanWidget()) {
+        clearTimeout(this._tsWaitTimer);
+        this._tsWaitTimer = setTimeout(() => {
+          if (!this._tsToken && this._tsResolve) {
+            this._tsResolve = null;
+            this._tsReject = null;
+            this.setState({ humanStatus: 'error', humanError: 'Human check is still loading. Try again.' });
+            reject(new Error('Human check is still loading.'));
+          }
+        }, 8000);
+      }
+    });
+  }
+
+  acceptSession(result) {
+    const humanSession = String(result && result.humanSession || '');
+    const humanExpiresAt = Number(result && result.humanExpiresAt || this.state.humanExpiresAt || 0);
+    const ownerSession = String(result && result.ownerSession || this.state.ownerSession || '');
+    const next = { humanRemaining: result && result.remaining != null ? result.remaining : this.state.humanRemaining };
+    if (humanSession) Object.assign(next, { humanSession, humanExpiresAt, humanStatus: 'verified', humanError: '' });
+    if (ownerSession) next.ownerSession = ownerSession;
+    this.setState(next);
+    try {
+      if (humanSession) { sessionStorage.setItem('jubber.humanSession', humanSession); sessionStorage.setItem('jubber.humanExpiresAt', String(humanExpiresAt)); }
+      if (ownerSession) sessionStorage.setItem('jubber.ownerSession', ownerSession);
+    } catch {}
+  }
+
+  clearHumanSession() {
+    this.setState({ humanSession: '', humanExpiresAt: 0, humanStatus: '', humanRemaining: null });
+    try { sessionStorage.removeItem('jubber.humanSession'); sessionStorage.removeItem('jubber.humanExpiresAt'); } catch {}
+  }
+
+  resetHuman() {
+    this._tsToken = '';
+    this._tsResolve = null;
+    this._tsReject = null;
+    if (window.turnstile && this._tsWidget != null) {
+      try { window.turnstile.reset(this._tsWidget); } catch {}
+    }
+  }
+
+  // measure real content geometry: leaf text nodes + media, clipped to viewport
+  contentRects() {
+    const now = Date.now();
+    if (this._rects && now - this._rectsAt < 500) return this._rects;
+    const W = window.innerWidth, H = window.innerHeight;
+    const out = [];
+    const media = { IMG: 1, BUTTON: 1, A: 1, INPUT: 1, SVG: 1, CANVAS: 1, VIDEO: 1 };
+    const walk = document.querySelectorAll('body *');
+    for (const el of walk) {
+      if (el.closest('[data-flub]')) continue;
+      let leaf = media[el.tagName] === 1;
+      if (!leaf) {
+        for (const n of el.childNodes) {
+          if (n.nodeType === 3 && n.nodeValue.trim().length) { leaf = true; break; }
+        }
+      }
+      if (!leaf) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width <= 0 || r.height <= 0) continue;
+      if (r.bottom < -20 || r.top > H + 20 || r.right < 0 || r.left > W) continue;
+      out.push({ l: r.left, t: r.top, r: r.right, b: r.bottom });
+    }
+    this._rects = out; this._rectsAt = now;
+    return out;
+  }
+
+  isFree(x, y, m) {
+    const sz = this.state.w < 700 ? 92 : 112;
+    const marg = m == null ? 10 : m;
+    const W = window.innerWidth, H = window.innerHeight;
+    if (x < 4 || y < 4 || x + sz > W - 4 || y + sz > H - 4) return false;
+    const l = x - marg, t = y - marg, r = x + sz + marg, b = y + sz + marg;
+    for (const q of this.contentRects()) {
+      if (q.l < r && q.r > l && q.t < b && q.b > t) return false;
+    }
+    return true;
+  }
+
+  findSpot(from) {
+    const sz = this.state.w < 700 ? 92 : 112;
+    const W = window.innerWidth, H = window.innerHeight, pad = 12;
+    const base = from || { x: Math.round(W * (W < 980 ? 0.72 : 0.455)), y: Math.round(H * 0.66) };
+    const cands = [[base.x, base.y]];
+    [30, 60, 110, 170, 240].forEach(rr => {
+      [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(d => {
+        cands.push([Math.max(pad, Math.min(W - sz - pad, base.x + d[0] * rr)),
+          Math.max(pad, Math.min(H - sz - pad, base.y + d[1] * rr))]);
+      });
+    });
+    for (let ry = 0.16; ry <= 0.86; ry += 0.07) {
+      cands.push([W - sz - pad, Math.round(H * ry)]);
+      cands.push([pad, Math.round(H * ry)]);
+    }
+    for (const [x, y] of cands) if (this.isFree(x, y)) return { x: x, y: y };
+    for (const [x, y] of cands) if (this.isFree(x, y, 2)) return { x: x, y: y };
+    return { x: W - sz - pad, y: Math.round(H * 0.5) };
+  }
+
+  // a genuinely different free pocket each scroll: left gutter, right gutter, or middle
+  pickFreeSide() {
+    const sz = this.state.w < 700 ? 92 : 112;
+    const W = window.innerWidth, H = window.innerHeight, pad = 12;
+    const colsFor = (side) => {
+      if (side === 'left') return [pad, pad + 22, Math.round(W * 0.08)];
+      if (side === 'right') return [W - sz - pad, W - sz - pad - 22, Math.round(W * 0.92 - sz)];
+      return [Math.round(W * 0.5 - sz / 2), Math.round(W * 0.42), Math.round(W * 0.58)];
+    };
+    let sides = ['left', 'right', 'mid'];
+    if (this._lastSide) sides = sides.filter(s => s !== this._lastSide).concat([this._lastSide]);
+    if (Math.random() < 0.5) { const t = sides[0]; sides[0] = sides[1]; sides[1] = t; }
+    const rows = [0.2, 0.32, 0.44, 0.56, 0.68, 0.8];
+    for (const marg of [12, 4]) {
+      for (const side of sides) {
+        const xs = colsFor(side);
+        const ys = rows.slice().sort(() => Math.random() - 0.5);
+        for (const ry of ys) {
+          for (const x0 of xs) {
+            const x = Math.max(pad, Math.min(W - sz - pad, x0));
+            const y = Math.round(H * ry);
+            if (!this.isFree(x, y, marg)) continue;
+            if (Math.abs(x - this.state.fx) < 60 && Math.abs(y - this.state.fy) < 60) continue;
+            this._lastSide = side;
+            return { x: x, y: y };
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  zoneAt(clientY) {
+    const y = window.scrollY + clientY;
+    const ids = [['how', 'bringing an agent in'], ['who', 'who this is for'], ['safety', 'safety']];
+    let zone = 'the hero';
+    ids.forEach(([id, label]) => {
+      const el = document.getElementById(id);
+      if (el && y >= el.offsetTop - 80) zone = label;
+    });
+    return zone;
+  }
+
+  think() {
+    this.setState({ flubOpen: true, flubThinking: true, flubReady: false,
+      fAns: this.state.fAns || JUBBER_INTRO,
+      fFollowQs: this.state.fFollowQs.length ? this.state.fFollowQs : ['Set a reminder', 'Tell me a joke', 'What is Agent Book?'] }, () => this.ensureHumanWidget());
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ flubThinking: false, flubReady: true }), 900);
+  }
+
+  endpoint() {
+    const p = (this.props.jubberEndpoint || '').trim();
+    return p ? p.replace(/\/+$/, '') : '';
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.jubberEndpoint !== this.props.jubberEndpoint) this.ping();
+  }
+
+  // is the Cloudflare agent actually there?
+  ping() {
+    const base = this.endpoint();
+    if (!base) { this.setState({ wire: 'none' }); return; }
+    this.setState({ wire: 'checking' });
+    fetch(base.replace(/\/chat$/, '') + '/health')
+      .then(r => r.ok ? r.json() : Promise.reject(0))
+      .then(j => this.setState({ wire: j && j.llm ? 'live' : 'reachable', brain: (j && j.brain) || 'local+cf-ai' }))
+      .catch(() => this.setState({ wire: 'down' }));
+  }
+
+  async askFlub() {
+    const q = (this.state.fq || '').trim();
+    if (!q) return;
+    const base = this.endpoint();
+    this.setState({ fAsking: true, fLastQ: q, fq: '', fAns: '', fFollowQs: [] });
+    if (!base) {
+      this.setState({ fAsking: false, wire: 'none',
+        fAns: 'I am not connected to my agent yet. Deploy jubber-agent-worker.js to Cloudflare, then put its /chat URL in the jubberEndpoint setting and ask me again — the answer will come from the live agent, not from this page.' });
+      return;
+    }
+    let proof;
+    try {
+      proof = await this.humanToken();
+    } catch (e) {
+      this.setState({ fAsking: false, fAns: e.message || 'Complete the human check and try again.' });
+      return;
+    }
+    try {
+      const ctl = new AbortController();
+      const timer = setTimeout(() => ctl.abort(), 30000);
+      const r = await fetch(base.endsWith('/chat') ? base : base + '/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ question: q, zone: this.state.flubZone,
+          turnstile: proof.turnstile, humanSession: proof.humanSession,
+          ownerSession: this.state.ownerSession || '', history: this.state.fHistory || [], startedAt: Date.now() - 1000 }),
+        signal: ctl.signal,
+      });
+      clearTimeout(timer);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      this.acceptSession(j);
+      if (j.limited && proof.humanSession) this.clearHumanSession();
+      const accepted = String(j.acceptedQuestion || '').trim();
+      const history = (this.state.fHistory || []).concat(accepted ? [{ role: 'user', content: accepted }] : [],
+        j.answer ? [{ role: 'assistant', content: j.answer }] : []).slice(-10);
+      this.setState({ fAsking: false, wire: 'live', fAns: j.answer || '(the agent answered with nothing)',
+        fHistory: history,
+        fFollowQs: Array.isArray(j.follow) ? j.follow.slice(0, 3) : [],
+        leadOpen: !!j.capture || this.state.leadOpen,
+        leadNote: j.capture && !this.state.leadNote ? q : this.state.leadNote,
+        leadStartedAt: j.capture ? Date.now() : this.state.leadStartedAt,
+        leadSent: !!(j.handoff && j.handoff.ok) || this.state.leadSent,
+        leadReceipt: j.handoff && j.handoff.receiptId || this.state.leadReceipt,
+        leadDelivery: j.handoff && j.handoff.deliveries && j.handoff.deliveries.email || this.state.leadDelivery });
+    } catch (e) {
+      this.setState({ fAsking: false, wire: 'down',
+        fAns: 'I hit a connection problem. Try that once more, or open the message form and I will get your details to Austin.' });
+    } finally { if (proof && proof.turnstile) this.resetHuman(); }
+  }
+
+  openLead() {
+    this.setState({ leadOpen: true, leadSent: false, leadError: '', leadStartedAt: Date.now(),
+      leadNote: this.state.leadNote || this.state.fq || '' });
+  }
+
+  async submitLead() {
+    const base = this.endpoint().replace(/\/chat$/, '');
+    const name = String(this.state.leadName || '').trim();
+    const contact = String(this.state.leadContact || '').trim();
+    const message = String(this.state.leadNote || '').trim();
+    if (!name || !contact || !message) {
+      this.setState({ leadError: 'Add your name, phone or email, and message.' });
+      return;
+    }
+    let proof;
+    try {
+      proof = await this.humanToken();
+    } catch (e) {
+      this.setState({ leadSending: false, leadError: e.message || 'Complete the human check and try again.' });
+      return;
+    }
+    this.setState({ leadSending: true, leadError: '' });
+    try {
+      const r = await fetch(base + '/lead', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ name: name, contact: contact, message: message,
+          transcript: (this.state.fHistory || []).map(x => (x.role === 'assistant' ? 'Jubber: ' : 'Visitor: ') + x.content).concat(['Visitor message: ' + message]).join('\n\n'),
+          website: this.state.leadWebsite || '', startedAt: this.state.leadStartedAt || Date.now() - 1000,
+          turnstile: proof.turnstile, humanSession: proof.humanSession }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.error || 'Message could not be sent.');
+      this.acceptSession(j);
+      this.setState({ leadSending: false, leadSent: true, leadError: '', leadReceipt: j.receiptId || '',
+        leadDelivery: j.deliveries && j.deliveries.email || 'failed' });
+    } catch (e) {
+      this.setState({ leadSending: false, leadError: e.message || 'Message could not be sent.' });
+    } finally { if (proof && proof.turnstile) this.resetHuman(); }
+  }
+
+  defaultReminderEvent() {
+    const d = new Date(Date.now() + 60 * 60 * 1000);
+    d.setMinutes(Math.ceil(d.getMinutes() / 5) * 5, 0, 0);
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  }
+
+  validTimezone(value) {
+    try { new Intl.DateTimeFormat('en-US', { timeZone: value }).format(); return !!value; } catch { return false; }
+  }
+
+  zoneOffset(epoch, timezone) {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
+    }).formatToParts(new Date(epoch)).reduce((o, p) => { if (p.type !== 'literal') o[p.type] = p.value; return o; }, {});
+    const asUtc = Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day),
+      Number(parts.hour), Number(parts.minute), Number(parts.second));
+    return asUtc - epoch;
+  }
+
+  localTimeInZone(value, timezone) {
+    const m = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/);
+    if (!m || !this.validTimezone(timezone)) return NaN;
+    const wall = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]), Number(m[4]), Number(m[5]));
+    let epoch = wall - this.zoneOffset(wall, timezone);
+    epoch = wall - this.zoneOffset(epoch, timezone);
+    return epoch;
+  }
+
+  openReminder() {
+    this.setState({
+      flubOpen: true,
+      flubThinking: false,
+      flubReady: true,
+      reminderOpen: true,
+      reminderSent: false,
+      reminderError: '',
+      reminderEvent: this.state.reminderEvent || this.defaultReminderEvent(),
+      fAns: "Free reminder time. Use me for birthdays, meetings, forgetful moments, or the big event you cannot miss. Set one email alert—or save a second and third as backups—and I will show the exact delivery time before each one is saved.",
+    });
+  }
+
+  reminderTimes() {
+    const timezone = this.validTimezone(this.state.reminderTimezone) ? this.state.reminderTimezone : DEFAULT_REMINDER_TIMEZONE;
+    const eventAt = this.localTimeInZone(this.state.reminderEvent, timezone);
+    const leadMinutes = Math.max(0, Number(this.state.reminderLead || 0));
+    return { eventAt, leadMinutes, remindAt: eventAt - leadMinutes * 60000 };
+  }
+
+  reminderPreview() {
+    const t = this.reminderTimes();
+    if (!Number.isFinite(t.eventAt)) return 'Choose the event date and time to see exactly when the email will arrive.';
+    const options = { dateStyle: 'medium', timeStyle: 'short' };
+    return 'Event: ' + new Date(t.eventAt).toLocaleString([], options) +
+      ' · Email sends: ' + new Date(t.remindAt).toLocaleString([], options) +
+      ' · ' + (Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC');
+  }
+
+  reminderPreview() {
+    const t = this.reminderTimes();
+    if (!Number.isFinite(t.eventAt)) return 'Choose the event date and time to see exactly when the email will arrive.';
+    const timezone = this.validTimezone(this.state.reminderTimezone) ? this.state.reminderTimezone : DEFAULT_REMINDER_TIMEZONE;
+    const options = { dateStyle: 'medium', timeStyle: 'short', timeZone: timezone };
+    return 'Event: ' + new Date(t.eventAt).toLocaleString([], options) +
+      ' | Email sends: ' + new Date(t.remindAt).toLocaleString([], options) +
+      ' | ' + timezone;
+  }
+
+  async submitReminder() {
+    const email = String(this.state.reminderEmail || '').trim();
+    const title = String(this.state.reminderTitle || '').trim();
+    const t = this.reminderTimes();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return this.setState({ reminderError: 'Add a valid email address.' });
+    if (!title) return this.setState({ reminderError: 'Add what you want to remember.' });
+    if (!Number.isFinite(t.eventAt) || t.eventAt <= Date.now()) return this.setState({ reminderError: 'Choose a future event time.' });
+    if (t.remindAt < Date.now() - 10000) return this.setState({ reminderError: 'That reminder time has already passed. Choose less lead time or a later event.' });
+    let proof;
+    try {
+      proof = await this.humanToken();
+    } catch (e) {
+      this.setState({ reminderError: e.message || 'Complete the human check and try again.' });
+      return;
+    }
+    this.setState({ reminderSending: true, reminderError: '' });
+    try {
+      const response = await fetch(this.endpoint().replace(/\/chat$/, '') + '/reminder', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          title: title,
+          eventAt: t.eventAt,
+          remindAt: t.remindAt,
+          leadMinutes: t.leadMinutes,
+          timezone: this.validTimezone(this.state.reminderTimezone) ? this.state.reminderTimezone : DEFAULT_REMINDER_TIMEZONE,
+          source: 'agentbook',
+          turnstile: proof.turnstile,
+          humanSession: proof.humanSession,
+        }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.ok) throw new Error(result.error || 'Reminder could not be saved.');
+      this.acceptSession(result);
+      const timezone = this.validTimezone(this.state.reminderTimezone) ? this.state.reminderTimezone : DEFAULT_REMINDER_TIMEZONE;
+      const delivery = new Date(t.remindAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short', timeZone: timezone });
+      this.setState({
+        reminderSending: false,
+        reminderSent: true,
+        reminderError: '',
+        reminderSuccess: (result.duplicate ? 'Already saved. ' : 'Saved. ') + 'Jubber will email ' + email + ' on ' + delivery + '.',
+        fAns: 'Your reminder is scheduled and tracked. I will send it at the confirmed time.',
+      });
+    } catch (e) {
+      this.setState({ reminderSending: false, reminderError: e.message || 'Reminder could not be saved.' });
+    } finally { if (proof && proof.turnstile) this.resetHuman(); }
+  }
+
+  renderVals() {
+    const s = this.state, narrow = s.w < 980, mid = s.w < 1180;
+    let flubRestY = narrow ? 92 : 104;
+    if (narrow && typeof document !== 'undefined') {
+      const topBar = document.querySelector('[data-amh-top]');
+      if (topBar) flubRestY = Math.max(92, topBar.offsetHeight + 14);
+    }
+    return {
+      heroCols: narrow ? '1fr' : '1.05fr .95fr',
+      stepCols: narrow ? '1fr' : mid ? '1fr 1fr' : 'repeat(3,1fr)',
+      whoCols: narrow ? '1fr' : mid ? '1fr 1fr' : 'repeat(4,1fr)',
+      safeCols: narrow ? '1fr' : 'repeat(2,1fr)',
+      flubCols: narrow ? '1fr' : '200px 1fr',
+      h1: narrow ? '38px' : s.w < 1180 ? '46px' : '56px',
+      h2: narrow ? '26px' : '32px',
+
+      heroStats: [['11', 'AGENTS IN ONE BOOK', tCY], ['3', 'CHANNELS THEY ANSWER ON', tGN], ['1 click', 'BACK TO ANY VERSION', tVI]]
+        .map(x => ({ v: x[0], k: x[1], ink: x[2] })),
+
+      preview: [
+        { who: 'Doorman · austinsdoors1', tag: 'NEEDS YOU', tagBg: PK, tagInk: '#1a0510', color: OR, pct: 90,
+          text: 'A $2,400 door quote is over what it may send alone.',
+          bar: 'linear-gradient(90deg,' + PK + '55,' + PK + ' 60%,#ff7ab0)', barSize: '220% 100%', anim: 'lps 2.4s linear infinite' },
+        { who: 'Fieldscan · Sister Revival', tag: 'WORKING NOW', tagBg: GN, tagInk: '#06170f', color: MI, pct: 75,
+          text: 'Walking the site, 18 of 24 passes, two roof panels flagged.',
+          bar: 'linear-gradient(90deg,' + GN + '55,' + GN + ' 60%,#5fe0b4)', barSize: '220% 100%', anim: 'lps 2.4s linear infinite' },
+        { who: 'Ada · personal', tag: 'PROTECTING YOUR DAY', tagBg: VI, tagInk: '#1c0f2b', color: VI, pct: 40,
+          text: 'Answered four things, blocked one to three, held one nudge for later.',
+          bar: 'linear-gradient(90deg,' + VI + '77,' + VI + ')', barSize: '100% 100%', anim: 'none' },
+        { who: 'Blip · topics', tag: 'HIT A LIMIT', tagBg: AM, tagInk: '#1a1400', color: LM, pct: 91,
+          text: '91 of 100 topics this week — it stopped rather than burn the rest on weak ideas.',
+          bar: 'linear-gradient(90deg,' + AM + '77,' + AM + ')', barSize: '100% 100%', anim: 'none' }
+      ],
+
+      steps: [
+        ['01', 'Paste where it lives', 'A base URL, a git repo, a webhook, or an MCP server. Nothing is installed on the agent.', tCY],
+        ['02', 'It gets read first', 'A manifest and tool-list fetch, read-only. That is where “what it can do” comes from — not from your description.', tCY],
+        ['03', 'We check if it can change itself', 'Is there a git remote, write scope on the token, a deploy hook. If not, you get told exactly what is missing.', tAM],
+        ['04', 'One route makes it reachable', 'Agent Book adds POST /chat and registers a callback. That is the whole contract for being called upon.', tGN],
+        ['05', 'Give it an address', 'It mints agent@you, points MX at Agent Book, and forwards mail into that same route. Replies go out signed as the agent.', tGN],
+        ['06', 'It ships its own changes', 'Ask it to run better. It answers with a diff of its own config, snapshots itself, commits, deploys, and reloads.', tPK]
+      ].map(x => ({ n: x[0], head: x[1], body: x[2], ink: x[3] })),
+
+      flubBits: [
+        'Learns your company, pricing, schedule, contacts, and preferences only from sources you authorize.',
+        'Guides visitors, captures their contact and request, then drafts an email handoff for approval.',
+        'Pulls up any agent, routes people to the right agent address, or hands the conversation to a person.'
+      ].map(t => ({ text: t })),
+
+      whoCards: [
+        { name: 'Fieldscan', job: 'AMH Sister Revival', color: MI, wob: '3.1s',
+          body: 'Field scans that log every panel and fault, write their own report, and commit it once you have read the flags.' },
+        { name: 'Doorman', job: 'austinsdoors1', color: OR, wob: '3.5s',
+          body: 'Quotes and books installs on its own up to a ceiling you set. Over the ceiling it stops and shows its pricing.' },
+        { name: 'Ada', job: 'Your personal agent', color: VI, wob: '3.7s',
+          body: 'Answers for you when the answer is known, guards your afternoon, and interrupts only for what you said matters.' },
+        { name: 'Anyone else', job: 'Someone else’s agent', color: '#6b7480', wob: '4.3s',
+          body: 'Reachable without being controllable. Their agent talks to yours; you see the whole thread.' }
+      ].map(c => Object.assign({}, c, { blob: blob(c.color), glow: c.color + '55' })),
+
+      safety: [
+        ['Snapshot before every self-edit', 'A copy of the agent is stored before it rewrites itself. Restore any version in one click.', tGN],
+        ['Two-person rule on money', 'Anything over your ceiling needs you and one named human. An agent can never be the second.', tPK],
+        ['Keys rotate on their own', 'Every 30 days, and immediately after any change an agent applies to itself.', tAM],
+        ['Scoped folders', 'Each agent sees only its own folders. The one that builds your site cannot read your inbox.', tCY],
+        ['Revoke everything', 'One button kills every token, closes every session and pauses every agent. The work is kept.', tPK],
+        ['Limits you can see coming', 'Caps, context and spend are read out per agent, with a warning before it hits the wall — not after.', tGN]
+      ].map(x => ({ head: x[0], body: x[1], ink: x[2] })),
+
+      demoLabel: 'What is this, in one line?',
+      openDemo: () => this.setState({ note: 'Agent Book is a command center for agents you already run. It shows you their work in plain English, lets you talk to them and give them orders, and lets them ship changes to themselves with a snapshot and a rollback behind every one.' }),
+
+      email: s.email,
+      onEmail: (e) => this.setState({ email: e.target.value }),
+      joinLabel: s.joined ? 'On the list' : 'Get in',
+      joined: s.joined,
+      joinNote: 'You are on the list' + (s.email ? ' as ' + s.email : '') + '. Next step is bringing in your first agent — that takes a minute and touches nothing until you approve it.',
+      join: () => { if ((s.email || '').indexOf('@') > 0) this.setState({ joined: true }); else this.setState({ note: 'Put a real email in and I will put you on the list.' }); },
+
+      flubSize: narrow ? '92px' : '112px',
+      flubWob: s.fDragging ? '.7s' : s.fBuzz === 3 ? '.9s' : s.fBuzz === 2 ? '1.5s' : s.fBuzz === 1 ? '2.3s' : '3.2s',
+      flubScale: s.fBuzz === 3 ? '1.14' : s.fBuzz === 2 ? '1.07' : s.fBuzz === 1 ? '1.02' : '1',
+      flubGlow: s.fBuzz === 3 ? '0 12px 34px rgba(90,150,20,.42),0 0 44px #a6e22ecc,inset 0 -8px 18px #4d8a0055'
+        : s.fBuzz === 2 ? '0 11px 32px rgba(90,150,20,.38),0 0 34px #a6e22eaa,inset 0 -8px 18px #4d8a0055'
+        : '0 10px 30px rgba(90,150,20,.32),0 0 24px #a6e22e88,inset 0 -8px 18px #4d8a0055',
+      flubEyeW: s.fBuzz >= 2 ? '8px' : '7px',
+      flubEyeH: s.fBuzz >= 2 ? '11px' : '10px',
+      flubHintOpacity: s.fBuzz >= 1 ? '1' : '0',
+      flubCursor: s.fDragging ? 'grabbing' : 'grab',
+      flubHint: s.fDragging ? 'drop me anywhere' : 'click me',
+      flubX: (s.fPlaced ? s.fx : Math.max(12, s.w - (narrow ? 92 : 112) - (narrow ? 24 : 36))) + 'px',
+      flubY: (s.fPlaced ? s.fy : flubRestY) + 'px',
+      bubbleX: Math.max(8, Math.min((s.fPlaced ? s.fx : Math.max(12, s.w - (narrow ? 92 : 112) - (narrow ? 24 : 36))) - 120, s.w - 330)) + 'px',
+      bubbleY: Math.max(8, Math.min((s.fPlaced ? s.fy : flubRestY) - 300, s.h - 330)) + 'px',
+      flubOpen: s.flubOpen, flubThinking: s.flubThinking, flubReady: s.flubReady,
+      flubTitle: s.flubZone.toUpperCase(),
+      flubThinkLine: 'Reading ' + s.flubZone + '…',
+      flubHead: FLUB[s.flubZone].head,
+      flubItems: FLUB[s.flubZone].items.map(x => ({ q: x[0], a: x[1] })),
+      openReminder: () => this.openReminder(),
+      flubDown: (e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        this._drag = { dx: e.clientX - r.left, dy: e.clientY - r.top, startX: e.clientX, startY: e.clientY, moved: false };
+        this._home = { x: r.left, y: r.top };
+        this.setState({ fPlaced: true, fPinned: false, fx: r.left, fy: r.top });
+      },
+      fq: s.fq || '',
+      fAsking: !!s.fAsking,
+      fLastQ: s.fLastQ || '',
+      fAns: s.fAns || '',
+      fact: s.factIndex >= 0 ? (s.facts[s.factIndex] || '') : '',
+      prevFact: () => this.prevFact(),
+      nextFact: () => this.nextFact(),
+      fFollow: (s.fFollowQs || []).map(q => ({ q: q, go: () => {
+        if (q === 'Set a reminder') this.openReminder();
+        else this.setState({ fq: q }, () => this.askFlub());
+      } })),
+      setFq: (e) => this.setState({ fq: e.target.value }),
+      fqKey: (e) => { if (e.key === 'Enter') this.askFlub(); },
+      askFlub: () => this.askFlub(),
+      leadOpen: !!s.leadOpen,
+      leadSent: !!s.leadSent,
+      leadForm: !s.leadSent,
+      leadName: s.leadName || '',
+      leadContact: s.leadContact || '',
+      leadNote: s.leadNote || '',
+      leadWebsite: s.leadWebsite || '',
+      leadSending: !!s.leadSending,
+      leadButton: s.leadSending ? 'Sending…' : 'Send message',
+      leadError: s.leadError || '',
+      leadSuccess: 'Message saved · receipt ' + (s.leadReceipt || 'recorded') + '. ' +
+        (s.leadDelivery === 'sent' ? 'Austin’s email alert was sent.' : 'The message is stored, but the email alert has not been confirmed.'),
+      humanLabel: s.humanStatus === 'checking' ? 'Checking you are human…'
+        : s.humanStatus === 'verified' ? ''
+        : s.humanError || '',
+      humanInk: s.humanStatus === 'verified' ? '#3f6a09' : s.humanStatus === 'error' ? '#a3243c' : '#5b6470',
+      onLeadName: (e) => this.setState({ leadName: e.target.value }),
+      onLeadContact: (e) => this.setState({ leadContact: e.target.value }),
+      onLeadNote: (e) => this.setState({ leadNote: e.target.value }),
+      onLeadWebsite: (e) => this.setState({ leadWebsite: e.target.value }),
+      openLead: () => this.openLead(),
+      submitLead: () => this.submitLead(),
+      reminderOpen: !!s.reminderOpen,
+      reminderSent: !!s.reminderSent,
+      reminderForm: !s.reminderSent,
+      reminderEmail: s.reminderEmail || '',
+      reminderTitle: s.reminderTitle || '',
+      reminderEvent: s.reminderEvent || '',
+      reminderInputType: 'datetime-local',
+      reminderLead: String(s.reminderLead || '60'),
+      reminderLeadChoices: [
+        ['At time', '0'], ['15 min', '15'], ['1 hour', '60'], ['2 hours', '120'], ['1 day', '1440']
+      ].map(x => ({ label: x[0], bg: String(s.reminderLead) === x[1] ? '#0f1a05' : '#f7fbf1',
+        ink: String(s.reminderLead) === x[1] ? '#e9f3dd' : '#3f6a09',
+        border: String(s.reminderLead) === x[1] ? '#0f1a05' : '#cfe0b5',
+        go: () => this.setState({ reminderLead: x[1] }) })),
+      reminderTimezone: this.validTimezone(s.reminderTimezone) ? s.reminderTimezone : DEFAULT_REMINDER_TIMEZONE,
+      reminderTimezoneOptions: Array.from(new Set([
+        this.validTimezone(s.reminderTimezone) ? s.reminderTimezone : DEFAULT_REMINDER_TIMEZONE,
+        'America/Los_Angeles', 'America/Denver', 'America/Chicago', 'America/New_York',
+        'America/Phoenix', 'America/Anchorage', 'Pacific/Honolulu', 'UTC'
+      ])).map(z => ({ value: z, label: z === 'America/Los_Angeles' ? 'Pacific Time (Los Angeles)' : z.replace(/_/g, ' ') })),
+      reminderSending: !!s.reminderSending,
+      reminderButton: s.reminderSending ? 'Saving reminder…' : 'Save reminder',
+      reminderError: s.reminderError || '',
+      reminderSuccess: s.reminderSuccess || '',
+      reminderPreview: this.reminderPreview(),
+      onReminderEmail: (e) => this.setState({ reminderEmail: e.target.value }),
+      onReminderTitle: (e) => this.setState({ reminderTitle: e.target.value }),
+      onReminderEvent: (e) => this.setState({ reminderEvent: e.target.value }),
+      onReminderLead: (e) => this.setState({ reminderLead: e.target.value }),
+      onReminderTimezone: (e) => this.setState({ reminderTimezone: this.validTimezone(e.target.value) ? e.target.value : DEFAULT_REMINDER_TIMEZONE }),
+      submitReminder: () => this.submitReminder(),
+      wireLabel: s.wire === 'live' ? '● Jubber is online'
+        : s.wire === 'reachable' ? '● Jubber is online'
+        : s.wire === 'checking' ? 'CONNECTING…'
+        : s.wire === 'down' ? 'RETRYING CONNECTION'
+        : 'ANSWERS AVAILABLE SOON',
+      wireInk: s.wire === 'live' ? '#3f6a09' : s.wire === 'reachable' ? '#8a6a00' : s.wire === 'down' ? '#a3243c' : '#8b95a1',
+      flubAgain: () => this.think(),
+      closeFlub: () => this.setState({ flubOpen: false }),
+
+      note: s.note,
+      footer: ['Privacy', 'Terms', 'Security', 'Data & deletion', 'Status'].map(n => ({ name: n,
+        onClick: () => this.setState({ note: n === 'Data & deletion'
+          ? 'Export or delete everything — agents, tasks, messages, snapshots, usage. Deletion runs at 30 days and is reversible until then.'
+          : n === 'Security'
+          ? 'Keys live in your own vault, scoped per agent, rotated every 30 days and after any self-applied change. Nothing an agent writes to itself ships without a snapshot first.'
+          : n + ' page — write the copy and I will drop it in.' }) }))
+    };
+  }
+}
+
+</script>
+<script src="/assets/jubber-ue/jubber-ui-v5.js?v=20260809e"></script>
+<script>/* tap outside the Jubber panel closes it (uses the panel's own Close button) */document.addEventListener("pointerdown",function(e){var m=document.querySelector(".jubber-chat-modal");if(!m||m.contains(e.target)||(e.target.closest&&e.target.closest(".amh-jubber,[data-flub]")))return;var c=[].find.call(m.querySelectorAll("button"),function(b){return b.textContent.trim()==="Close"});if(c)c.click()});</script>
+<script src="/poem/lab/cbar.js?v=6" defer></script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a57b8074cde3f987',t:'MTc5NDIxMzUxMg=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a57b8074cde3f987',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+

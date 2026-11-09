@@ -1,0 +1,19 @@
+/* Globe -> UFO Field seam (2026-10-12). The game iframe's sun sits 116px (phone 96px) below this
+   section's bottom edge at 74% (phone 78%) across; this glow is the upper half of the same light,
+   so the sun reads as one light source across both shots. Kept in sync with revival/game/sun.js +
+   the .sun-spill layer in revival/game/index.html (same circle size, stops and centre). The game
+   pulses --amhSunI on this document as the sun breathes / flares. */
+.space{position:relative}
+.space-in{position:relative;z-index:1}
+.space::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(circle 440px at 74% calc(100% + 116px),rgba(255,176,96,.22) 0,rgba(255,140,60,.08) 190px,rgba(255,120,50,0) 440px);
+  opacity:calc(.75 + var(--amhSunI,.1) * 1.5);transition:opacity .25s linear}
+@media (max-width:699px){
+  .space::after{background:radial-gradient(circle 300px at 78% calc(100% + 96px),rgba(255,176,96,.22) 0,rgba(255,140,60,.08) 130px,rgba(255,120,50,0) 300px)}
+}
+/* the embed's own fill matches the space section's floor colour so nothing flashes before the iframe paints */
+.interstellar-embed,.interstellar-frame{background:#06070c!important}
+/* Polaris + Big Dipper + Orion's Belt (assets/constellations.js), behind the globe and copy */
+.space-const{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+/* while the UFO Field is being played (class set by revival/game/field.js) the overlay play pill steps aside */
+.amh-playing .interstellar-play{opacity:0!important;pointer-events:none!important;transition:opacity .2s}

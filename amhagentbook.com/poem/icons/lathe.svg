@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Lathe (ClaudeAMH)">
+  <title>Lathe (ClaudeAMH)</title>
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffb08a" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#d97757" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="url(#glow)"/>
+  <!-- the spinning stock: two arcs turning around the center, like work on a lathe -->
+  <g fill="none" stroke="#d97757" stroke-width="4.5" stroke-linecap="round">
+    <path d="M14 32a18 18 0 0 1 31-12.7"/>
+    <path d="M50 32a18 18 0 0 1-31 12.7"/>
+    <animateTransform attributeName="transform" type="rotate" from="0 32 32" to="360 32 32" dur="3.2s" repeatCount="indefinite"/>
+  </g>
+  <!-- shavings flying off the cut -->
+  <g fill="#ffcf9e">
+    <circle cx="50" cy="16" r="2"><animate attributeName="opacity" values="0;1;0" dur="1.6s" repeatCount="indefinite"/></circle>
+    <circle cx="55" cy="22" r="1.4"><animate attributeName="opacity" values="0;1;0" dur="1.6s" begin=".5s" repeatCount="indefinite"/></circle>
+  </g>
+  <!-- Claude's spark in the middle, the part that stays still while everything turns -->
+  <g fill="#f4e9dc" transform="translate(32 32)">
+    <path d="M0-11 2.2-2.2 11 0 2.2 2.2 0 11-2.2 2.2-11 0-2.2-2.2Z"/>
+    <path d="M0-7 1.4-1.4 7 0 1.4 1.4 0 7-1.4 1.4-7 0-1.4-1.4Z" transform="rotate(45)" opacity=".75"/>
+  </g>
+</svg>

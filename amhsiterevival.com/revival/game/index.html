@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="data:,">
+<title>UFO Field | Interactive AMH Browser Game</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="UFO Field is an interactive browser game and visual technology demo created by Artificial Mind Hive and Service Pricer LLC.">
+<meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="https://www.amhsiterevival.com/interstellar">
+<meta property="og:type" content="website"><meta property="og:title" content="UFO Field | Interactive AMH Browser Game"><meta property="og:description" content="Summon the fleet in an interactive AMH browser game and visual technology demo."><meta property="og:url" content="https://www.amhsiterevival.com/interstellar">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"UFO Field","gamePlatform":"Web browser","url":"https://www.amhsiterevival.com/interstellar","description":"Interactive browser game and visual technology demo.","publisher":{"@type":"Organization","name":"Service Pricer LLC"}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #03010a;
+    --deep: #0a0418;
+    --plasma: #6b1f6b;
+    --indigo: #1a0b3e;
+    --accent: #3ef2a2;
+    --accent-soft: #7dffc0;
+    --star: #bfffe6;
+    --text: #fefcf7;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--accent); color: var(--deep); }
+
+  /* Mock app header */
+  .mock-header {
+    position: relative; z-index: 50;
+    padding: 16px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(3, 1, 10, 0.7);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid rgba(254, 252, 247, 0.06);
+  }
+  .sp-mark {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent), #13b074);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; color: var(--deep); font-size: 14px;
+    letter-spacing: 0.05em;
+    box-shadow: 0 0 24px rgba(62, 242, 162, 0.5), inset 0 1px 0 rgba(191, 255, 230, 0.4);
+  }
+  .mock-header a { color: rgba(254, 252, 247, 0.7); text-decoration: none; font-size: 14px; font-weight: 500; }
+
+  /* Section */
+  .why {
+    position: relative;
+    padding: 100px 20px 120px;
+    overflow: hidden;
+    isolation: isolate;
+    min-height: 100vh;
+  }
+  .why-bg {
+    position: absolute; inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 90% 60% at 25% 15%, rgba(140, 40, 140, 0.45), transparent 55%),
+      radial-gradient(ellipse 80% 60% at 80% 80%, rgba(60, 25, 140, 0.55), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 50% 50%, rgba(20, 10, 40, 0.5), transparent 70%),
+      linear-gradient(180deg, #03010a 0%, #07021a 50%, #03010a 100%);
+  }
+
+  /* Drifting plasma nebula blobs (3 of them, different speeds) */
+  .neb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .neb-1 {
+    width: 420px; height: 420px;
+    top: -80px; left: -120px;
+    background: radial-gradient(circle, #d44ba8 0%, #6b1f6b 35%, transparent 65%);
+    opacity: 0.55;
+    animation: drift1 36s ease-in-out infinite alternate;
+  }
+  .neb-2 {
+    width: 520px; height: 420px;
+    bottom: -120px; right: -180px;
+    background: radial-gradient(circle, #5a3ad9 0%, #1a0b3e 40%, transparent 70%);
+    opacity: 0.6;
+    animation: drift2 28s ease-in-out infinite alternate;
+  }
+  .neb-3 {
+    width: 360px; height: 360px;
+    top: 30%; right: -80px;
+    background: radial-gradient(circle, #3ef2a2 0%, #1f9e7a 40%, transparent 70%);
+    opacity: 0.18;
+    animation: drift3 22s ease-in-out infinite alternate;
+  }
+  @keyframes drift1 { from { transform: translate(0, 0) scale(1); } to { transform: translate(80px, 50px) scale(1.15); } }
+  @keyframes drift2 { from { transform: translate(0, 0) scale(1); } to { transform: translate(-60px, -40px) scale(1.2); } }
+  @keyframes drift3 { from { transform: translate(0, 0) scale(1); opacity: 0.12; } to { transform: translate(-40px, 30px) scale(1.1); opacity: 0.28; } }
+
+  /* Stars canvas */
+  .stars-svg {
+    position: absolute; inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    width: 100%; height: 100%;
+  }
+
+  /* Twinkle */
+  .stars-svg circle.tw {
+    animation: twinkle var(--tw, 3s) ease-in-out infinite;
+    animation-delay: var(--td, 0s);
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: var(--tmin, 0.3); transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+  .stars-svg .bright {
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+
+  /* Big foreground stars with cross flare */
+  .big-star { animation: bigPulse 4s ease-in-out infinite; }
+  @keyframes bigPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+
+  /* Constellation */
+  .const-line {
+    stroke: rgba(62, 242, 162, 0.5);
+    stroke-width: 0.7;
+    stroke-dasharray: 4 7;
+    animation: dash 30s linear infinite;
+    filter: drop-shadow(0 0 4px rgba(62, 242, 162, 0.7));
+  }
+  .const-line.faint { stroke-opacity: 0.22; }
+  @keyframes dash { to { stroke-dashoffset: -1000; } }
+
+  .summit .core { fill: var(--star); filter: drop-shadow(0 0 18px var(--accent)) drop-shadow(0 0 40px var(--accent)) drop-shadow(0 0 78px var(--accent)) drop-shadow(0 0 120px var(--accent)); }
+  .summit .halo { fill: var(--accent); opacity: 0.78; animation: haloP 3.5s ease-in-out infinite; }
+  @keyframes haloP {
+    0%, 100% { opacity: 0.78; r: var(--r-base); }
+    50% { opacity: 1; }
+  }
+  .summit-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    fill: rgba(62, 242, 162, 0.75);
+  }
+
+  /* Anamorphic lens flare on Allison */
+  .anamorphic {
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  /* Shooting star tracks */
+  .shooter {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 8px white, 0 0 18px var(--accent);
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+  }
+  .shooter::after {
+    content: '';
+    position: absolute;
+    top: 50%; right: -2px;
+    transform: translateY(-50%);
+    width: 180px; height: 1.5px;
+    background: linear-gradient(90deg, transparent 0%, rgba(191, 255, 230, 0.4) 30%, var(--star) 80%, white 100%);
+    border-radius: 999px;
+    filter: blur(0.5px);
+  }
+  .shooter.long::after { width: 260px; height: 2px; }
+  .shooter.fat::after { width: 200px; height: 3px; box-shadow: 0 0 8px var(--accent); }
+
+  /* UFO */
+  .ufo {
+    position: absolute;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0;
+    width: 56px; height: 22px;
+    will-change: transform;
+  }
+  .ufo svg { width: 100%; height: 100%; overflow: visible; }
+  .ufo .dome { fill: rgba(176, 200, 255, 0.85); filter: drop-shadow(0 0 8px #67e8f9); }
+  .ufo .body { fill: #1f2937; stroke: rgba(176, 200, 255, 0.5); stroke-width: 0.5; }
+  .ufo .body-shadow { fill: #0a0418; }
+  .ufo .lights circle { fill: var(--accent-soft); animation: ufoBlink 0.4s steps(2) infinite; }
+  .ufo .lights circle:nth-child(2) { animation-delay: 0.1s; fill: #67e8f9; }
+  .ufo .lights circle:nth-child(3) { animation-delay: 0.2s; fill: #f87171; }
+  .ufo .lights circle:nth-child(4) { animation-delay: 0.3s; fill: #34d399; }
+  .ufo .lights circle:nth-child(5) { animation-delay: 0.05s; fill: var(--accent-soft); }
+  @keyframes ufoBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .ufo .beam {
+    fill: url(#beamGrad);
+    opacity: 0.6;
+    animation: beamFlicker 0.15s ease-in-out infinite alternate;
+  }
+  @keyframes beamFlicker { from { opacity: 0.4; } to { opacity: 0.75; } }
+
+  /* Tap ripple */
+  .tap-ripple {
+    position: absolute;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+    box-shadow: 0 0 20px var(--accent), inset 0 0 20px rgba(62, 242, 162, 0.3);
+  }
+  .tap-ripple.active {
+    animation: rippleOut 0.7s ease-out forwards;
+  }
+  @keyframes rippleOut {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(0.3); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(3); }
+  }
+
+  /* Cooldown HUD */
+  .cooldown-hud {
+    position: absolute;
+    top: 16px; right: 20px;
+    z-index: 11;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    background: rgba(3, 1, 10, 0.6);
+    border: 1px solid rgba(62, 242, 162, 0.3);
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .cooldown-hud.visible { display: inline-flex; }
+  .cooldown-hud .cd-label { color: rgba(254, 252, 247, 0.5); }
+  .cooldown-hud .cd-time { color: var(--accent); font-weight: 600; }
+
+  /* Tweaks panel */
+  .tweaks-panel {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    z-index: 100;
+    width: 260px;
+    background: rgba(10, 4, 24, 0.92);
+    border: 1px solid rgba(62, 242, 162, 0.25);
+    border-radius: 14px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(62, 242, 162, 0.1);
+    display: none;
+  }
+  .tweaks-panel.open { display: block; }
+  .tweaks-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 14px; border-bottom: 1px solid rgba(254, 252, 247, 0.08);
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .tweaks-close {
+    background: none; border: none; color: rgba(254, 252, 247, 0.5);
+    cursor: pointer; font-size: 16px; line-height: 1; padding: 0;
+  }
+  .tweaks-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 12px; }
+  .tweak-row { display: flex; flex-direction: column; gap: 6px; }
+  .tweak-row label {
+    font-size: 11px; color: rgba(254, 252, 247, 0.7);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .tweak-row label .val { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 10px; }
+  .tweak-row input[type="range"] { width: 100%; accent-color: var(--accent); }
+  .tweak-row.toggle { flex-direction: row; align-items: center; justify-content: space-between; }
+  .tweak-btn {
+    padding: 8px 12px; background: rgba(62, 242, 162, 0.15);
+    border: 1px solid rgba(62, 242, 162, 0.4); border-radius: 8px;
+    color: var(--accent-soft); font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer;
+    transition: background 200ms;
+  }
+  .tweak-btn:hover { background: rgba(62, 242, 162, 0.25); }
+  .tweak-toggle {
+    width: 36px; height: 20px; border-radius: 999px;
+    background: rgba(254, 252, 247, 0.15); position: relative; cursor: pointer;
+    transition: background 200ms; border: none; padding: 0;
+  }
+  .tweak-toggle.on { background: var(--accent); }
+  .tweak-toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: white; transition: transform 200ms;
+  }
+  .why.ufo-following { cursor: none; }
+  .why.ufo-following * { cursor: none; }
+
+  .why.game-mode .ufo-tap { z-index: 50 !important; }
+  .why.game-mode #ufo-tap {
+    /* Subtle cyan tint so hero is findable without overwhelming the scene */
+    filter:
+      drop-shadow(0 0 3px rgba(103, 232, 249, 0.7))
+      drop-shadow(0 0 8px rgba(103, 232, 249, 0.35));
+    animation: heroPulse 2s ease-in-out infinite;
+  }
+  @keyframes heroPulse {
+    0%, 100% { filter:
+      drop-shadow(0 0 3px rgba(103, 232, 249, 0.7))
+      drop-shadow(0 0 8px rgba(103, 232, 249, 0.35)); }
+    50% { filter:
+      drop-shadow(0 0 5px rgba(103, 232, 249, 0.85))
+      drop-shadow(0 0 12px rgba(103, 232, 249, 0.5)); }
+  }
+  /* Friendly tracking ring under the UFO so the player never loses it */
+  .why.game-mode #ufo-tap::after {
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 64px; height: 64px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px solid rgba(103, 232, 249, 0.35);
+    box-shadow:
+      inset 0 0 8px rgba(103, 232, 249, 0.2),
+      0 0 8px rgba(103, 232, 249, 0.25);
+    pointer-events: none;
+    animation: heroRing 2s ease-in-out infinite;
+    z-index: -1;
+  }
+  @keyframes heroRing {
+    0%, 100% { width: 64px; height: 64px; opacity: 0.4; }
+    50% { width: 74px; height: 74px; opacity: 0.7; }
+  }
+  .why.game-mode .why-inner { pointer-events: none; }
+
+  /* Fade content out during game; fade back in 4s after game ends */
+  .why-inner {
+    transition: opacity 600ms ease-out, transform 600ms ease-out;
+    transition-delay: 0s;
+  }
+  .why.game-mode .why-inner {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+    transition: opacity 350ms ease-in, transform 350ms ease-in;
+    transition-delay: 0s;
+  }
+  .why .why-inner.fade-back {
+    transition: opacity 800ms ease-out, transform 800ms ease-out;
+    transition-delay: 4s;
+  }
+
+  /* ===== GAME MODE ===== */
+  .meteor {
+    position: absolute;
+    width: 10px; height: 10px;
+    z-index: 4;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .meteor::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffffff, #fff4a3 30%, #ffcc33 60%, #13b074 100%);
+    box-shadow: 0 0 12px #facc15, 0 0 24px rgba(250, 204, 21, 0.65);
+  }
+  .meteor::after {
+    content: '';
+    position: absolute;
+    top: 50%; right: 100%;
+    transform: translateY(-50%);
+    width: 80px; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(250, 204, 21, 0.55) 50%, #fde68a);
+    border-radius: 999px;
+    filter: blur(0.5px);
+  }
+  .meteor.fast::before {
+    background: radial-gradient(circle at 30% 30%, #ffffff, #c4f1ff 30%, #67e8f9 60%, #1e40af 100%);
+    box-shadow: 0 0 12px #67e8f9, 0 0 24px rgba(103, 232, 249, 0.7);
+  }
+  .meteor.fast::after {
+    background: linear-gradient(90deg, transparent, rgba(103, 232, 249, 0.55) 50%, #c4f1ff);
+  }
+  /* DEATH ROCK — unmistakable red, bigger core, longer animated red tail */
+  .meteor.deadly {
+    width: 14px; height: 14px;
+  }
+  .meteor.deadly::before {
+    background: radial-gradient(circle at 30% 30%, #ffffff, #ffaaaa 22%, #ff1a1a 55%, #5a0000 100%);
+    box-shadow:
+      0 0 20px #ff2a2a,
+      0 0 44px rgba(255, 42, 42, 0.95),
+      0 0 70px rgba(239, 68, 68, 0.55);
+    animation: deadlyPulse 0.55s ease-in-out infinite;
+  }
+  .meteor.deadly::after {
+    background: linear-gradient(90deg, transparent, rgba(255, 26, 26, 0.7) 25%, #ff2a2a 65%, #ff8a8a);
+    height: 5px;
+    width: 130px;
+    filter: blur(0.5px) drop-shadow(0 0 8px #ff2a2a);
+  }
+  @keyframes deadlyPulse {
+    0%, 100% { box-shadow: 0 0 20px #ff2a2a, 0 0 44px rgba(255, 42, 42, 0.95), 0 0 70px rgba(239, 68, 68, 0.55); }
+    50% { box-shadow: 0 0 28px #ff2a2a, 0 0 60px rgba(255, 42, 42, 1), 0 0 90px rgba(239, 68, 68, 0.8); }
+  }
+
+  /* Meteor fade-in (so it never pops in mid-screen invisibly) */
+  .meteor { opacity: 0; transition: opacity 200ms ease-out; }
+  .meteor.live { opacity: 1; }
+
+  /* Spawn telegraph — small reticle at spawn edge so you SEE incoming */
+  .telegraph {
+    position: absolute;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px dashed #fca5a5;
+    transform: translate(-50%, -50%) scale(0.4);
+    pointer-events: none;
+    z-index: 11;
+    opacity: 0;
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+  }
+  .telegraph.show {
+    animation: telegraphPulse 600ms ease-out forwards;
+  }
+  .telegraph.show::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid rgba(252, 165, 165, 0.4);
+    animation: telegraphRing 600ms ease-out forwards;
+  }
+  @keyframes telegraphPulse {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.4) rotate(0deg); }
+    20%  { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(20deg); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4) rotate(180deg); }
+  }
+  @keyframes telegraphRing {
+    0%   { transform: scale(0.6); opacity: 0; }
+    30%  { opacity: 1; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+  .telegraph.deadly { border-color: #ef4444; box-shadow: 0 0 24px #ef4444; }
+
+  /* Game HUD */
+  .game-hud {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background: rgba(3, 1, 10, 0.85);
+    border: 1px solid rgba(62, 242, 162, 0.4);
+    border-radius: 999px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    box-shadow: 0 0 30px rgba(62, 242, 162, 0.3);
+  }
+  .game-hud.active { display: inline-flex; }
+
+  /* Debug rescue test button — visible always so you can find it */
+  .debug-rescue {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    display: inline-flex;
+    background: rgba(236, 72, 153, 0.25);
+    border: 1.5px solid rgba(236, 72, 153, 0.8);
+    color: #fce7f3;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+    transition: all 200ms;
+    animation: debugPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes debugPulse {
+    0%, 100% { box-shadow: 0 0 16px rgba(236, 72, 153, 0.4); }
+    50% { box-shadow: 0 0 28px rgba(236, 72, 153, 0.8); }
+  }
+  .debug-rescue:hover {
+    background: rgba(236, 72, 153, 0.4);
+    box-shadow: 0 0 32px rgba(236, 72, 153, 0.9);
+    transform: scale(1.05);
+  }
+  .why.game-mode .debug-rescue { display: inline-flex; }
+  /* Hide button when not on Why section view (let it show always for now) */
+  .game-hud .gh-time { color: var(--accent); font-weight: 600; min-width: 56px; }
+  .game-hud .gh-divider { color: rgba(254, 252, 247, 0.25); }
+  .game-hud .gh-best { color: rgba(254, 252, 247, 0.6); }
+  .game-hud .gh-level {
+    padding: 2px 8px;
+    background: rgba(62, 242, 162, 0.15);
+    border-radius: 999px;
+    color: var(--accent-soft);
+    font-size: 9px;
+  }
+  .game-hud .gh-level.intense { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+  .game-hud .gh-shields {
+    display: inline-flex; gap: 4px; align-items: center;
+    color: rgba(254, 252, 247, 0.6);
+  }
+  .gh-shield-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #ec4899;
+    box-shadow: 0 0 6px #ec4899, 0 0 12px rgba(236, 72, 153, 0.5);
+    animation: shieldPulse 1.6s ease-in-out infinite;
+  }
+  .gh-shield-dot.spent { background: rgba(254,252,247,0.12); box-shadow: none; animation: none; }
+  @keyframes shieldPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(0.85); }
+  }
+
+  /* Rescue UFO */
+  .rescue-ufo {
+    position: fixed;
+    width: 96px; height: 42px;
+    pointer-events: none;
+    z-index: 51;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  .rescue-ufo svg { width: 100%; height: 100%; overflow: visible; }
+  .rescue-ufo .body { fill: #1a0820; stroke: rgba(236, 72, 153, 0.8); stroke-width: 0.6; }
+  .rescue-ufo .body-shadow { fill: #0a0a0f; }
+  .rescue-ufo .dome { fill: rgba(236, 72, 153, 0.85); filter: drop-shadow(0 0 10px #ec4899); }
+  .rescue-ufo .lights circle { fill: #f9a8d4; animation: ufoBlink 0.3s steps(2) infinite; }
+  .rescue-ufo .lights circle:nth-child(2) { animation-delay: 0.1s; fill: #fb7185; }
+  .rescue-ufo .lights circle:nth-child(3) { animation-delay: 0.2s; fill: #f9a8d4; }
+  .rescue-ufo .glow {
+    position: absolute; inset: -10px;
+    background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(236, 72, 153, 0.5), transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Rescue beam — high-tech NEON GREEN */
+  .rescue-beam {
+    position: absolute;
+    height: 3px;
+    background: linear-gradient(90deg,
+      rgba(57, 255, 20, 0) 0%,
+      rgba(57, 255, 20, 0.95) 15%,
+      rgba(220, 255, 200, 1) 50%,
+      rgba(57, 255, 20, 0.95) 85%,
+      rgba(57, 255, 20, 0) 100%);
+    box-shadow:
+      0 0 12px #39ff14,
+      0 0 28px rgba(57, 255, 20, 0.85),
+      0 0 50px rgba(57, 255, 20, 0.45);
+    transform-origin: 0 50%;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    border-radius: 999px;
+  }
+  .rescue-beam.fire {
+    animation: beamFire 220ms ease-out forwards;
+  }
+  @keyframes beamFire {
+    0% { opacity: 0; height: 1px; filter: blur(4px); }
+    18% { opacity: 1; height: 6px; filter: blur(0); }
+    70% { opacity: 1; height: 5px; }
+    100% { opacity: 0; height: 1px; }
+  }
+
+  /* Danger pause: red shockwave at collision point — buys time for rescue */
+  .danger-spark {
+    position: absolute;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    border: 2px solid #fca5a5;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    z-index: 12;
+    box-shadow: 0 0 30px #ef4444, inset 0 0 30px rgba(239, 68, 68, 0.4);
+  }
+  .danger-spark.pulse { animation: dangerPulse 700ms ease-out forwards; }
+  @keyframes dangerPulse {
+    0%   { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
+    20%  { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(2.4); opacity: 0; }
+  }
+  .danger-flash {
+    position: fixed; inset: 0;
+    background: radial-gradient(circle at var(--fx, 50%) var(--fy, 50%),
+      rgba(239, 68, 68, 0.35) 0%, rgba(239, 68, 68, 0.12) 20%, transparent 50%);
+    pointer-events: none; z-index: 9;
+    opacity: 0;
+  }
+  .danger-flash.fire { animation: dangerFlash 700ms ease-out forwards; }
+  @keyframes dangerFlash {
+    0% { opacity: 0; }
+    15% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* Speech bubble above hero UFO */
+  .ufo-bubble {
+    position: fixed;
+    background: rgba(254, 252, 247, 0.96);
+    color: #1a0820;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 14px;
+    white-space: nowrap;
+    z-index: 53;
+    pointer-events: none;
+    transform: translate(-50%, -100%) scale(0.5);
+    opacity: 0;
+    box-shadow: 0 0 24px rgba(236, 72, 153, 0.6), 0 4px 16px rgba(0, 0, 0, 0.3);
+    border: 1.5px solid rgba(236, 72, 153, 0.6);
+    transition: transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 200ms;
+  }
+  .ufo-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -7px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid rgba(254, 252, 247, 0.96);
+    filter: drop-shadow(0 1px 0 rgba(236, 72, 153, 0.6));
+  }
+  .ufo-bubble.show {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1);
+  }
+  .ufo-bubble .accent {
+    color: #ec4899; font-weight: 700;
+  }
+
+  /* Trailing rescue banner — held by tractor beam tether */
+  .rescue-banner {
+    position: fixed;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  /* HARD LOCK: banner wrapper and label MUST NEVER be horizontally flipped.
+     Any code that tries to scaleX(-1) the banner is overruled — text always reads forward. */
+  .rescue-banner .label {
+    /* Lock direction explicitly — never inherit any parent transform that flips us. */
+    transform: none;
+    direction: ltr !important;
+    unicode-bidi: isolate;
+  }
+  .rescue-banner .tether {
+    position: absolute;
+    height: 22px;
+    width: 60px;
+    left: -60px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(90deg,
+      rgba(236, 72, 153, 0.9) 0%,
+      rgba(236, 72, 153, 0.4) 50%,
+      transparent 100%);
+    filter: blur(2px);
+    clip-path: polygon(0 35%, 100% 0%, 100% 100%, 0 65%);
+    animation: tetherFlicker 0.18s steps(2) infinite;
+  }
+  @keyframes tetherFlicker {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
+  }
+  .rescue-banner .label {
+    position: relative;
+    background: #ffffff;
+    border: 2px solid #000;
+    color: #39ff14;
+    font-family: 'Orbitron', 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    padding: 12px 22px;
+    border-radius: 12px;
+    box-shadow: 0 0 24px rgba(57, 255, 20, 0.55), 0 0 12px rgba(0, 0, 0, 0.6);
+    white-space: nowrap;
+    /* Black stroke around neon green text for legibility */
+    -webkit-text-stroke: 1.5px #000;
+    text-shadow:
+      0 0 6px rgba(57, 255, 20, 0.7),
+      1px 1px 0 #000,
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000;
+    /* gentle hover wobble while being towed */
+    animation: bannerSway 0.9s ease-in-out infinite;
+  }
+  .rescue-banner .label .accent { color: #39ff14; font-weight: 900; }
+  @keyframes bannerSway {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-3px) rotate(1deg); }
+  }
+
+  /* Rescue alert flash on HUD */
+  .gh-shield-dot.consuming {
+    animation: shieldConsume 600ms ease-out forwards;
+  }
+  @keyframes shieldConsume {
+    0% { transform: scale(1); box-shadow: 0 0 6px #ec4899, 0 0 12px rgba(236, 72, 153, 0.5); }
+    40% { transform: scale(2.2); box-shadow: 0 0 24px #ec4899, 0 0 48px rgba(236, 72, 153, 1); }
+    100% { transform: scale(0); opacity: 0; }
+  }
+
+  /* Earned-credit toast */
+  .rescue-toast {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    background: rgba(236, 72, 153, 0.15);
+    border: 1px solid rgba(236, 72, 153, 0.5);
+    color: #f9a8d4;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+    z-index: 49;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms, transform 300ms;
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+  }
+  .rescue-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* Explosion */
+  .explosion {
+    position: absolute;
+    width: 80px; height: 80px;
+    pointer-events: none;
+    z-index: 5;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+  }
+  .explosion.boom { animation: explode 800ms ease-out forwards; }
+  .explosion::before, .explosion::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+  }
+  .explosion::before {
+    background: radial-gradient(circle, #fff 0%, #bfffe6 20%, #3ef2a2 50%, transparent 70%);
+    box-shadow: 0 0 60px #3ef2a2, 0 0 120px rgba(62, 242, 162, 0.6);
+  }
+  .explosion::after {
+    background: radial-gradient(circle, transparent 30%, rgba(62, 242, 162, 0.3) 50%, transparent 100%);
+  }
+  @keyframes explode {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+    20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(2.5); }
+  }
+
+  /* Game over modal */
+  .game-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(3, 1, 10, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 20px;
+  }
+  .game-modal.open { display: flex; animation: modalFade 300ms ease-out; }
+  @keyframes modalFade { from { opacity: 0; } to { opacity: 1; } }
+  .game-modal-card {
+    width: 100%;
+    max-width: 360px;
+    background: linear-gradient(165deg, rgba(20, 10, 40, 0.95), rgba(10, 4, 24, 0.95));
+    border: 1px solid rgba(62, 242, 162, 0.3);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(62, 242, 162, 0.2);
+    text-align: center;
+  }
+  .gm-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(254, 252, 247, 0.5);
+    margin-bottom: 8px;
+  }
+  .gm-score {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 56px; line-height: 1;
+    color: var(--accent);
+    margin-bottom: 6px;
+    text-shadow: 0 0 30px rgba(62, 242, 162, 0.5);
+  }
+  .gm-unit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em;
+    color: rgba(254, 252, 247, 0.6);
+    margin-bottom: 16px;
+  }
+  .gm-rank-msg {
+    font-size: 14px;
+    color: var(--accent-soft);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .gm-input {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(254, 252, 247, 0.05);
+    border: 1px solid rgba(62, 242, 162, 0.4);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    outline: none;
+    transition: border-color 200ms;
+  }
+  .gm-input:focus { border-color: var(--accent); box-shadow: 0 0 20px rgba(62, 242, 162, 0.3); }
+  .gm-actions { display: flex; gap: 8px; }
+  .gm-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(62, 242, 162, 0.4);
+    background: rgba(62, 242, 162, 0.15);
+    color: var(--accent-soft);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 200ms;
+  }
+  .gm-btn:hover { background: rgba(62, 242, 162, 0.3); }
+  .gm-btn.secondary {
+    background: rgba(254, 252, 247, 0.04);
+    color: rgba(254, 252, 247, 0.7);
+    border-color: rgba(254, 252, 247, 0.15);
+  }
+  /* Floating leaderboard panel — left-middle, separate from modal */
+  .gm-leaderboard {
+    position: fixed;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-12px);
+    width: 240px;
+    z-index: 199;
+    background: rgba(8, 4, 18, 0.92);
+    border: 1px solid rgba(254, 252, 247, 0.14);
+    border-radius: 14px;
+    padding: 14px 16px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(62, 242, 162, 0.08);
+    text-align: left;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 280ms ease-out, transform 320ms cubic-bezier(0.34, 1.2, 0.64, 1);
+  }
+  .gm-leaderboard.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(-50%) translateX(0);
+  }
+  .gm-lb-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 247, 0.4);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .gm-lb-row {
+    display: flex; align-items: center;
+    padding: 4px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(254, 252, 247, 0.7);
+  }
+  .gm-lb-row.you { color: var(--accent); font-weight: 600; }
+  .gm-lb-row .rank { width: 24px; color: rgba(254, 252, 247, 0.4); }
+  .gm-lb-row .name { flex: 1; letter-spacing: 0.08em; }
+  .gm-lb-row .score { color: var(--accent); }
+
+  /* Discreet toast (low score) */
+  .game-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(40px);
+    z-index: 150;
+    padding: 8px 14px;
+    background: rgba(3, 1, 10, 0.85);
+    border: 1px solid rgba(254, 252, 247, 0.12);
+    border-radius: 999px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 247, 0.7);
+    opacity: 0;
+    transition: opacity 300ms, transform 300ms;
+    pointer-events: none;
+  }
+  .game-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* Hyperspace warp lines (rare burst) */
+  .warp-burst {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+  }
+
+  /* Content */
+  .why-inner {
+    position: relative;
+    z-index: 10;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    border: 1px solid rgba(254, 252, 247, 0.16);
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(254, 252, 247, 0.78);
+    background: rgba(254, 252, 247, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    margin-bottom: 28px;
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent), 0 0 24px var(--accent);
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+  @keyframes dotPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  h2.title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(44px, 11vw, 96px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin: 0 0 22px;
+    color: var(--text);
+    text-shadow:
+      0 0 30px rgba(62, 242, 162, 0.2),
+      0 0 60px rgba(107, 31, 107, 0.5);
+  }
+  h2.title .accent {
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(62, 242, 162, 0.7), 0 0 50px rgba(62, 242, 162, 0.4);
+  }
+  .sub {
+    font-size: 17px;
+    line-height: 1.55;
+    color: rgba(254, 252, 247, 0.7);
+    max-width: 580px;
+    margin: 0 auto 56px;
+    text-wrap: pretty;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 40px;
+  }
+  @media (min-width: 700px) {
+    .grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .why { padding: 140px 28px 160px; }
+  }
+
+  .card {
+    position: relative;
+    padding: 28px 22px 24px;
+    background: linear-gradient(165deg, rgba(254, 252, 247, 0.06) 0%, rgba(254, 252, 247, 0.015) 100%);
+    border: 1px solid rgba(254, 252, 247, 0.1);
+    border-radius: 18px;
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    text-align: left;
+    overflow: hidden;
+    transition: transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 300ms, box-shadow 300ms;
+  }
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 18px;
+    background: radial-gradient(circle at 50% 0%, rgba(62, 242, 162, 0.18), transparent 65%);
+    opacity: 0;
+    transition: opacity 400ms;
+    pointer-events: none;
+  }
+  .card:hover, .card:active {
+    transform: translateY(-3px);
+    border-color: rgba(62, 242, 162, 0.3);
+    box-shadow: 0 28px 56px -22px rgba(62, 242, 162, 0.3), 0 0 80px -24px rgba(107, 31, 107, 0.55);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .num {
+    position: absolute;
+    top: 18px; right: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    color: rgba(254, 252, 247, 0.5);
+  }
+  .orb {
+    position: relative;
+    width: 56px; height: 56px;
+    margin-bottom: 20px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(62, 242, 162, 0.2), rgba(176, 58, 142, 0.12));
+    border: 1px solid rgba(62, 242, 162, 0.3);
+    box-shadow: inset 0 1px 0 rgba(191, 255, 230, 0.3), 0 0 30px rgba(62, 242, 162, 0.22);
+  }
+  .orb::before {
+    content: '';
+    position: absolute; inset: -10px;
+    border-radius: 22px;
+    background: radial-gradient(circle, rgba(62, 242, 162, 0.4), transparent 70%);
+    filter: blur(14px); z-index: -1; opacity: 0.6;
+  }
+  .orb svg {
+    width: 26px; height: 26px;
+    color: var(--accent-soft);
+    filter: drop-shadow(0 0 6px rgba(62, 242, 162, 0.7));
+  }
+  .ftitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+  }
+  .fdesc {
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(254, 252, 247, 0.65);
+    margin: 0 0 18px;
+    text-wrap: pretty;
+  }
+  .fmeta {
+    display: flex; align-items: center; gap: 8px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(254, 252, 247, 0.08);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(62, 242, 162, 0.85);
+  }
+  .fmeta .arr { margin-left: auto; transition: transform 300ms; }
+  .card:hover .fmeta .arr { transform: translateX(4px); }
+
+  /* HUD-style mini caption above section, mobile flex */
+  .hud {
+    position: absolute;
+    top: 18px; left: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: #c8ffe9;
+    z-index: 80;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    border: 1px solid rgba(62, 242, 162, 0.42);
+    background: linear-gradient(180deg, rgba(9, 14, 20, 0.78), rgba(5, 7, 11, 0.44));
+    box-shadow: 0 14px 34px -22px rgba(62, 242, 162, 0.72), inset 0 1px 0 rgba(255, 231, 173, 0.18);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  .hud .live::before {
+    content: '●';
+    color: #ffe7ad;
+    margin-right: 6px;
+    animation: dotPulse 1.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .neb-1, .neb-2, .neb-3, .stars-svg circle.tw, .const-line, .summit .halo,
+    .eyebrow .dot, .big-star, .ufo, .shooter { animation: none !important; }
+  }
+
+  /* ===== Rendered assets (Blender/Cycles) ===== */
+  .ufo .ufo-real, .rescue-ufo .ufo-real {
+    position: absolute; left: 3.125%; width: 93.75%; aspect-ratio: 2 / 1;
+    top: -14%;
+    background: url("/revival/game/ufo-sheet.webp") 0 0 / 800% 100% no-repeat;
+    animation: ufoSpin 0.96s steps(8) infinite;
+    pointer-events: none;
+  }
+  .rescue-ufo .ufo-real {
+    top: -7.4%;
+    filter: drop-shadow(0 0 6px rgba(236, 72, 153, 0.85)) hue-rotate(-40deg) saturate(1.2);
+  }
+  @keyframes ufoSpin { from { background-position: 0% 0; } to { background-position: 114.2857% 0; } }
+  .ufo .beam { mix-blend-mode: screen; }
+  .summit .sun-img {
+    transform-box: fill-box; transform-origin: center;
+    animation: sunBreathe 4.5s ease-in-out infinite;
+  }
+  @keyframes sunBreathe {
+    0%, 100% { opacity: 0.92; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.04); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ufo-real, .summit .sun-img { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<style>
+  .amh-edge-fade{position:fixed;inset:0;z-index:60;pointer-events:none;background:linear-gradient(180deg,rgba(5,7,11,0) 0%,rgba(5,7,11,0) 88%,#05070b 99%,#05070b 100%);}
+  .why{min-height:auto!important;padding-bottom:120px!important;}
+
+  /* ===== 2026-10-12: globe -> field seam, live sun light, field canvas, HUD v2 ===== */
+  .seam-fade{position:absolute;left:0;right:0;top:0;height:300px;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg,#06070c 0,rgba(6,7,12,.94) 46px,rgba(6,7,12,.6) 150px,rgba(6,7,12,0) 300px)}
+  .neb-1{top:140px!important}
+  .sun-spill{position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:screen;
+    background:radial-gradient(circle 440px at var(--sunX,74%) var(--sunY,116px),rgba(255,176,96,.22) 0,rgba(255,140,60,.08) 190px,rgba(255,120,50,0) 440px);
+    opacity:calc(.75 + var(--sunI,.1) * 1.5)}
+  @media (max-width:699px){.sun-spill{background:radial-gradient(circle 300px at var(--sunX,78%) var(--sunY,96px),rgba(255,176,96,.22) 0,rgba(255,140,60,.08) 130px,rgba(255,120,50,0) 300px)}}
+  .sun-gl{z-index:3;pointer-events:none}
+  .sun-dust{position:absolute;left:0;top:0;width:100%;height:100%;z-index:11;pointer-events:none}
+  .why.field-on .sun-dust{opacity:.3}
+  .field-cv{position:fixed;inset:0;width:100%;height:100%;z-index:45;pointer-events:none;display:none}
+  .why.field-on .field-cv{display:block}
+  .why.field-on #ufo-tap,.why.field-on .debug-rescue{opacity:0!important;display:none!important}
+  .why.field-on .hud{opacity:0;transition:opacity .2s}
+  .game-hud.active{display:flex;flex-direction:column;gap:7px;border-radius:16px;padding:9px 16px 8px;letter-spacing:.12em;
+    background:linear-gradient(180deg,rgba(9,14,20,.86),rgba(5,7,11,.72));box-shadow:0 14px 40px -18px rgba(62,242,162,.55),inset 0 1px 0 rgba(255,231,173,.12)}
+  .gh-row{display:flex;gap:16px;align-items:center;justify-content:center}
+  .gh-cell{display:flex;flex-direction:column;align-items:center;line-height:1}
+  .gh-cell b{font:700 15px/1 'JetBrains Mono',monospace;color:#eafff6;letter-spacing:.04em}
+  .gh-cell i{font-style:normal;font-size:8px;letter-spacing:.2em;color:rgba(254,252,247,.5);margin-top:5px;white-space:nowrap}
+  .gh-score b{color:var(--accent);font-size:19px;min-width:66px;text-align:center;text-shadow:0 0 14px rgba(62,242,162,.5)}
+  .gh-cell b.gh-level{font-size:10px;padding:4px 9px;border-radius:999px;background:rgba(62,242,162,.15);color:#7dffc0;letter-spacing:.16em}
+  .gh-cell b.gh-level[data-l="2"]{background:rgba(255,170,60,.18);color:#ffcf8a}
+  .gh-cell b.gh-level[data-l="3"],.gh-cell b.gh-level[data-l="4"]{background:rgba(239,68,68,.22);color:#fca5a5;box-shadow:0 0 12px rgba(239,68,68,.35)}
+  .gh-meter{display:flex;align-items:center;gap:6px;font-size:8px;letter-spacing:.2em;color:rgba(254,252,247,.6)}
+  .gh-meter i{font-style:normal}
+  .gh-meter em{display:block;width:64px;height:5px;border-radius:9px;background:rgba(254,252,247,.12);overflow:hidden}
+  .gh-meter s{display:block;height:100%;width:0;background:linear-gradient(90deg,#7cc8ff,#e6f6ff);text-decoration:none;transition:width .15s}
+  .gh-meter.boost s{background:linear-gradient(90deg,#3ef2a2,#bfffe6)}
+  .game-hud.zap-ready .gh-meter.zap{color:#d6f3ff}
+  .game-hud.zap-ready .gh-meter.zap s{box-shadow:0 0 10px #bfe6ff;animation:zapReady .6s ease-in-out infinite alternate}
+  @keyframes zapReady{from{opacity:.6}to{opacity:1}}
+  .gh-status{min-width:84px;font-size:9px;letter-spacing:.16em;color:#bfffe6;text-align:left}
+  .gh-status.sh{color:#9fe8ff;text-shadow:0 0 10px rgba(120,220,255,.7)}.gh-status.sf{color:#8fffe0}.gh-status.zn{color:rgba(191,255,230,.6)}
+  @media (max-width:520px){.game-hud.active{width:calc(100% - 20px);padding:7px 10px}.gh-row{gap:10px}.gh-meter em{width:40px}.gh-status{min-width:60px}.gh-score b{font-size:17px}}
+  .field-hint{position:fixed;left:50%;transform:translateX(-50%);z-index:60;text-align:center;font:600 12px/1.65 'JetBrains Mono',monospace;color:rgba(234,255,246,.92);
+    background:rgba(5,7,11,.74);border:1px solid rgba(62,242,162,.3);border-radius:12px;padding:8px 14px;opacity:0;pointer-events:none;transition:opacity .4s;width:max-content;max-width:calc(100% - 24px)}
+  .field-hint.show{opacity:1}
+  .field-hint b{color:#3ef2a2}
+  .field-hint .lg{font-size:10px;color:rgba(254,252,247,.66)}
+  .field-hint .lg i{display:inline-block;width:9px;height:9px;margin:0 4px 0 10px;vertical-align:-1px}
+  .field-hint .k-safe{border:1.5px dashed #8fffe0}.field-hint .k-shield{border-radius:50%;border:1.5px solid #9fe8ff}
+  .field-hint .k-bad{border-radius:50%;background:#ff4b3a;box-shadow:0 0 6px #ff4b3a}
+  .zoom-btn{display:none;position:fixed;right:16px;width:76px;height:76px;border-radius:50%;z-index:62;border:0;padding:0;
+    background:conic-gradient(#3ef2a2 calc(var(--b,1) * 360deg),rgba(62,242,162,.18) 0);box-shadow:0 0 24px rgba(62,242,162,.4);touch-action:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
+  .zoom-btn span{position:absolute;inset:6px;border-radius:50%;display:grid;place-items:center;background:rgba(5,9,12,.88);color:#bfffe6;font:800 12px/1 'JetBrains Mono',monospace;letter-spacing:.14em}
+  .zoom-btn.ready span{background:linear-gradient(135deg,#8fffe0,#3ef2a2);color:#04110c}
+  @media (pointer:coarse){.why.field-on .zoom-btn{display:block}}
+  .gm-lb-empty{text-align:center;color:rgba(254,252,247,.4);font-size:11px;font-family:'JetBrains Mono',monospace}
+</style>
+<div class="amh-edge-fade"></div>
+
+<section class="why" data-screen-label="Why · AMH">
+  <div class="why-bg"></div>
+  <div class="seam-fade" aria-hidden="true"></div>
+  <div class="neb neb-1"></div>
+  <div class="neb neb-2"></div>
+  <div class="neb neb-3"></div>
+
+  <div class="hud"><span class="live">SECTOR 37.51°N · MISSION RIDGE</span></div>
+
+  <!-- Star + constellation field -->
+  <svg class="stars-svg" viewBox="0 0 1600 1400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <radialGradient id="lensFlare">
+        <stop offset="0%" stop-color="#bfffe6" stop-opacity="1"/>
+        <stop offset="40%" stop-color="#3ef2a2" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#3ef2a2" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="lensFlareCool">
+        <stop offset="0%" stop-color="#bdd9ff" stop-opacity="1"/>
+        <stop offset="40%" stop-color="#5b8dff" stop-opacity="0.5"/>
+        <stop offset="100%" stop-color="#5b8dff" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="anamorph" x1="0" y1="0.5" x2="1" y2="0.5">
+        <stop offset="0%" stop-color="#67e8f9" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#67e8f9" stop-opacity="0.7"/>
+        <stop offset="100%" stop-color="#67e8f9" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="beamGrad" x1="0.5" y1="0" x2="0.5" y2="1">
+        <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#67e8f9" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <!-- 4 layers of stars (filled by JS) -->
+    <g id="far-stars"></g>
+    <g id="mid-stars"></g>
+    <g id="near-stars"></g>
+    <g id="big-stars"></g>
+
+    <!-- Mission Ridge constellation — Allison centered (brightest, only one visible above title) -->
+    <g id="constellation">
+      <!-- Only the centerpiece star (Allison) is featured here, since the side peaks
+           get covered by content below. Keep it as the singular focal beacon. -->
+
+      <!-- Mt Allison — brightest, with anamorphic lens flare -->
+      <g class="summit" transform="translate(1180 240)" style="--r-base: 28px;">
+        <!-- Blender-rendered star: emissive photosphere + corona, compositor fog glow + streaks -->
+        <image class="sun-img" href="/revival/game/sun.webp?v=2" x="-160" y="-160" width="320" height="320"/>
+        <text class="summit-label" x="14" y="-16">ALLISON 2,658</text>
+      </g>
+    </g>
+  </svg>
+
+  <!-- Shooting star elements (pool, JS animates) -->
+  <div class="shooter" id="sh1"></div>
+  <div class="shooter long" id="sh2"></div>
+  <div class="shooter" id="sh3"></div>
+  <div class="shooter fat" id="sh4"></div>
+  <div class="shooter long" id="sh5"></div>
+
+  <!-- Tap-summoned UFO (separate from ambient one) -->
+  <div class="ufo ufo-tap" id="ufo-tap">
+    <svg viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+      <polygon class="beam" points="35,18 65,18 75,40 25,40"/>
+    </svg>
+    <span class="ufo-real" aria-hidden="true"></span>
+  </div>
+
+  <!-- Tap ripple feedback -->
+  <div class="tap-ripple" id="tap-ripple"></div>
+
+  <!-- Cooldown indicator -->
+  <div class="cooldown-hud" id="cooldown-hud">
+    <span class="cd-label">UFO COOLDOWN</span>
+    <span class="cd-time" id="cd-time">25s</span>
+  </div>
+
+  <!-- UFO -->
+  <div class="ufo" id="ufo">
+    <svg viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+      <!-- beam -->
+      <polygon class="beam" points="35,18 65,18 75,40 25,40"/>
+    </svg>
+    <!-- Blender-rendered saucer (8-frame spin sprite) -->
+    <span class="ufo-real" aria-hidden="true"></span>
+  </div>
+
+  <div class="why-inner">
+    <div class="eyebrow">
+      <span class="dot"></span>
+      Why Artificial Mind Hive
+    </div>
+
+    <h2 class="title">Real sites.<br>Real revival.<br>Real <span class="accent">fast</span>.</h2>
+
+    <p class="sub">
+      Studio-built. Founder-tested. Live on real businesses. Premium sites, app-like motion, client portals, smart workrooms, quote flows — every move that makes a business feel high-class, without the bloat.
+    </p>
+
+    <div class="grid">
+      <article class="card">
+        <span class="num">01 / MISSION</span>
+        <div class="orb">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+        </div>
+        <h3 class="ftitle">Preview in days</h3>
+        <p class="fdesc">We rebuild your site and host a live preview. You see it before you pay a cent.</p>
+        <div class="fmeta"><span>Live preview · No risk</span><span class="arr">→</span></div>
+      </article>
+
+      <article class="card">
+        <span class="num">02 / ALLISON</span>
+        <div class="orb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3"/></svg>
+        </div>
+        <h3 class="ftitle">App-like experiences</h3>
+        <p class="fdesc">Animated moments, dashboards, maps, quote flows — not a flat template. Motion that earns trust.</p>
+        <div class="fmeta"><span>Premium · Interactive</span><span class="arr">→</span></div>
+      </article>
+
+      <article class="card">
+        <span class="num">03 / MONUMENT</span>
+        <div class="orb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-2.5z"/></svg>
+        </div>
+        <h3 class="ftitle">Founder-certified</h3>
+        <p class="fdesc">No bloat. Every build ships because a real business needed it. Client portals. Review rooms. Launch polish.</p>
+        <div class="fmeta"><span>Founder-built · Live</span><span class="arr">→</span></div>
+      </article>
+    </div>
+  <!-- Tweaks panel -->
+  <div class="tweaks-panel" id="tweaks-panel">
+    <div class="tweaks-head">
+      <span>Change settings</span>
+      <button class="tweaks-close" id="tweaks-close" aria-label="Close">×</button>
+    </div>
+    <div class="tweaks-body">
+      <div class="tweak-row">
+        <label>Tap to summon UFO <span class="val" id="tap-state">ON</span></label>
+        <button class="tweak-toggle on" id="tap-toggle" aria-label="Toggle tap UFO"></button>
+      </div>
+      <div class="tweak-row">
+        <label>UFO cooldown <span class="val" id="cd-val">25s</span></label>
+        <input type="range" id="cd-slider" min="5" max="60" step="5" value="25">
+      </div>
+      <div class="tweak-row">
+        <label>Shooter frequency <span class="val" id="sh-val">Normal</span></label>
+        <input type="range" id="sh-slider" min="0" max="2" step="1" value="1">
+      </div>
+      <div class="tweak-row">
+        <label>Star density <span class="val" id="dens-val">High</span></label>
+        <input type="range" id="dens-slider" min="0" max="2" step="1" value="2">
+      </div>
+      <button class="tweak-btn" id="summon-btn">SUMMON UFO NOW</button>
+    </div>
+  </div>
+  <!-- Game HUD -->
+  <div class="game-hud" id="game-hud">
+    <span>⏱</span>
+    <span class="gh-time" id="gh-time">0.0s</span>
+    <span class="gh-divider">·</span>
+    <span class="gh-level" id="gh-level">EASY</span>
+    <span class="gh-divider">·</span>
+    <span class="gh-best">Best: <span id="gh-best">—</span></span>
+    <span class="gh-divider">·</span>
+    <span class="gh-shields" id="gh-shields" title="Rescue allies on standby"></span>
+  </div>
+
+  <!-- Debug: force rescue trigger (visible only during game) -->
+  <button class="debug-rescue" id="debug-rescue" type="button" style="display:none!important" aria-hidden="true">⚡ Test Rescue</button>
+
+  <!-- Rescue UFO (allied) -->
+  <div class="rescue-ufo" id="rescue-ufo" aria-hidden="true">
+    <div class="glow"></div>
+    <span class="ufo-real" aria-hidden="true"></span>
+  </div>
+
+  <!-- Rescue toast -->
+  <div class="rescue-toast" id="rescue-toast">+1 Rescue Ally</div>
+
+  <!-- Hero UFO speech bubble -->
+  <div class="ufo-bubble" id="ufo-bubble" aria-hidden="true">
+    <span class="accent">NP —</span> SP's got your back in the field
+  </div>
+
+  <!-- Rescue banner trail -->
+  <div class="rescue-banner" id="rescue-banner" aria-hidden="true">
+    <div class="tether"></div>
+    <div class="label"><span class="accent">SP</span> — got your back in the field</div>
+  </div>
+
+  <!-- Danger flash overlay -->
+  <div class="danger-flash" id="danger-flash"></div>
+
+  <!-- Game Over Modal -->
+  <div class="game-modal" id="game-modal">
+    <div class="game-modal-card">
+      <div class="gm-label">Run Complete</div>
+      <div class="gm-score" id="gm-score">0.0</div>
+      <div class="gm-unit">Seconds Survived</div>
+      <div class="gm-rank-msg" id="gm-rank-msg" style="display:none;"></div>
+      <input class="gm-input" id="gm-input" type="text" maxlength="12" placeholder="Your name" style="display:none;" />
+      <div class="gm-actions">
+        <button class="gm-btn secondary" id="gm-close">Close</button>
+        <button class="gm-btn" id="gm-restart">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating leaderboard (left-middle, separate from modal) -->
+  <div class="gm-leaderboard" id="gm-leaderboard"></div>
+
+  <!-- Discreet toast -->
+  <div class="game-toast" id="game-toast"></div>
+
+</section>
+
+<script>
+// ============== STARFIELD GENERATION ==============
+(function() {
+  const ns = 'http://www.w3.org/2000/svg';
+  const rand = (a, b) => a + Math.random() * (b - a);
+
+  function makeStars(groupId, count, opts) {
+    const g = document.getElementById(groupId);
+    if (!g) return;
+    for (let i = 0; i < count; i++) {
+      const c = document.createElementNS(ns, 'circle');
+      c.setAttribute('cx', rand(0, 1600).toFixed(1));
+      c.setAttribute('cy', rand(0, 1400).toFixed(1));
+      c.setAttribute('r', rand(opts.rMin, opts.rMax).toFixed(2));
+      c.setAttribute('fill', opts.fill);
+      const op = rand(opts.opMin, opts.opMax);
+      c.setAttribute('opacity', op.toFixed(2));
+      if (opts.twinkle) {
+        c.setAttribute('class', opts.cls || 'tw');
+        c.style.setProperty('--tw', `${rand(2, 5).toFixed(1)}s`);
+        c.style.setProperty('--td', `${rand(0, 4).toFixed(1)}s`);
+        c.style.setProperty('--tmin', op.toFixed(2));
+      }
+      g.appendChild(c);
+    }
+  }
+
+  // Heavier counts than v1 — Star Wars density
+  makeStars('far-stars', 380, { rMin: 0.3, rMax: 0.9, fill: '#cbb8e8', opMin: 0.18, opMax: 0.5, twinkle: false });
+  makeStars('mid-stars', 180, { rMin: 0.7, rMax: 1.5, fill: '#fefcf7', opMin: 0.4, opMax: 0.85, twinkle: true });
+  makeStars('near-stars', 60, { rMin: 1.3, rMax: 2.2, fill: '#fefcf7', opMin: 0.5, opMax: 1, twinkle: true });
+
+  // Big foreground stars with cross-flare
+  const big = document.getElementById('big-stars');
+  for (let i = 0; i < 14; i++) {
+    const cx = rand(80, 1520);
+    const cy = rand(80, 1320);
+    const r = rand(1.6, 2.6);
+    const flareLen = rand(8, 16);
+    const g2 = document.createElementNS(ns, 'g');
+    g2.setAttribute('class', 'big-star');
+    g2.style.animationDelay = `${rand(0, 4).toFixed(1)}s`;
+    g2.innerHTML = `
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="#fefcf7"/>
+      <line x1="${cx - flareLen}" y1="${cy}" x2="${cx + flareLen}" y2="${cy}" stroke="#fefcf7" stroke-width="0.5" opacity="0.6"/>
+      <line x1="${cx}" y1="${cy - flareLen}" x2="${cx}" y2="${cy + flareLen}" stroke="#fefcf7" stroke-width="0.5" opacity="0.6"/>
+      <circle cx="${cx}" cy="${cy}" r="${r * 4}" fill="url(#lensFlare)" opacity="0.35"/>
+    `;
+    big.appendChild(g2);
+  }
+
+  // Add a few cool-blue accent stars
+  for (let i = 0; i < 8; i++) {
+    const cx = rand(80, 1520);
+    const cy = rand(80, 1320);
+    const r = rand(1.2, 2);
+    const g2 = document.createElementNS(ns, 'g');
+    g2.setAttribute('class', 'big-star');
+    g2.style.animationDelay = `${rand(0, 4).toFixed(1)}s`;
+    g2.innerHTML = `
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="#bdd9ff"/>
+      <circle cx="${cx}" cy="${cy}" r="${r * 4}" fill="url(#lensFlareCool)" opacity="0.5"/>
+    `;
+    big.appendChild(g2);
+  }
+})();
+
+// ============== SHOOTING STARS ==============
+(function() {
+  const shooters = ['sh1','sh2','sh3','sh4','sh5'].map(id => document.getElementById(id));
+  const W = () => window.innerWidth;
+  const H = () => window.innerHeight;
+
+  function fire(el) {
+    const startX = -120;
+    const startY = Math.random() * H() * 0.55;
+    const angle = 12 + Math.random() * 18; // 12°–30° downward
+    const speed = 0.8 + Math.random() * 0.7; // seconds
+    const distance = W() + 240;
+    const dx = distance;
+    const dy = distance * Math.tan(angle * Math.PI / 180);
+
+    el.style.transition = 'none';
+    el.style.transform = `translate(${startX}px, ${startY}px) rotate(${angle}deg)`;
+    el.style.opacity = '0';
+    // force reflow
+    void el.offsetWidth;
+
+    el.style.transition = `transform ${speed}s linear, opacity ${speed * 0.3}s ease-out`;
+    el.style.opacity = '1';
+    requestAnimationFrame(() => {
+      el.style.transform = `translate(${startX + dx}px, ${startY + dy}px) rotate(${angle}deg)`;
+      setTimeout(() => { el.style.opacity = '0'; }, speed * 700);
+    });
+  }
+
+  function loop() {
+    const which = shooters[Math.floor(Math.random() * shooters.length)];
+    fire(which);
+    // sometimes fire two at once
+    if (Math.random() < 0.45) {
+      const other = shooters[Math.floor(Math.random() * shooters.length)];
+      if (other !== which) setTimeout(() => fire(other), 200 + Math.random() * 300);
+    }
+    setTimeout(loop, 1000 + Math.random() * 1500); // every 1.0s–2.5s
+  }
+  // start after a beat
+  setTimeout(loop, 800);
+})();
+
+// ============== UFO ==============
+(function() {
+  const ufo = document.getElementById('ufo');
+  if (!ufo) return;
+
+  function flightPath() {
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    // Pick start side
+    const fromLeft = Math.random() > 0.5;
+    const startX = fromLeft ? -80 : W + 80;
+    const endX = fromLeft ? W + 80 : -80;
+    const baseY = rand(60, H * 0.6);
+    const flip = fromLeft ? 1 : -1;
+
+    // duration: 2.4–3.2s total flight, fast bursts inside
+    const duration = 2400 + Math.random() * 800;
+
+    ufo.style.transition = 'none';
+    ufo.style.opacity = '0';
+    ufo.style.transform = `translate(${startX}px, ${baseY}px) scaleX(${flip})`;
+    void ufo.offsetWidth;
+
+    // Build a keyframe path with quick zigzags using Web Animations API
+    const kf = [];
+    const steps = 16;
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const x = startX + (endX - startX) * t;
+      // wavy zigzag with random darts
+      const wave = Math.sin(t * Math.PI * 4) * 40;
+      const dart = (Math.random() < 0.18 ? rand(-30, 30) : 0);
+      const y = baseY + wave + dart;
+      const opacity = (i === 0 || i === steps) ? 0 : (i < 2 || i > steps - 2 ? 0.5 : 1);
+      const tilt = Math.sin(t * Math.PI * 4) * 10 * flip;
+      kf.push({
+        transform: `translate(${x}px, ${y}px) scaleX(${flip}) rotate(${tilt}deg)`,
+        opacity: opacity,
+      });
+    }
+    const anim = ufo.animate(kf, {
+      duration: duration,
+      easing: 'cubic-bezier(0.4, 0, 0.6, 1)',
+      fill: 'forwards',
+    });
+    anim.onfinish = () => {
+      ufo.style.opacity = '0';
+    };
+  }
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function loop() {
+    flightPath();
+    // ambient UFO every ~5s
+    const wait = 5000;
+    setTimeout(loop, wait);
+  }
+  setTimeout(loop, 400); // fire one right as the section scrolls into view — no waiting
+})();
+
+// ============== PARALLAX ON MOUSE/TILT ==============
+(function() {
+  const layers = [
+    { el: document.getElementById('far-stars'), depth: 4 },
+    { el: document.getElementById('mid-stars'), depth: 8 },
+    { el: document.getElementById('near-stars'), depth: 14 },
+    { el: document.getElementById('big-stars'), depth: 22 },
+  ];
+  let mx = 0, my = 0, tx = 0, ty = 0;
+  document.addEventListener('mousemove', (e) => {
+    mx = (e.clientX / window.innerWidth - 0.5);
+    my = (e.clientY / window.innerHeight - 0.5);
+  });
+  function tick() {
+    tx += (mx - tx) * 0.05;
+    ty += (my - ty) * 0.05;
+    layers.forEach(l => {
+      if (l.el) l.el.style.transform = `translate3d(${(-tx * l.depth).toFixed(1)}px, ${(-ty * l.depth).toFixed(1)}px, 0)`;
+    });
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+// ============== TAP-TO-SUMMON UFO ==============
+(function() {
+  const ufoTap = document.getElementById('ufo-tap');
+  const ripple = document.getElementById('tap-ripple');
+  const cdHud = document.getElementById('cooldown-hud');
+  const cdTime = document.getElementById('cd-time');
+  const section = document.querySelector('.why');
+  if (!ufoTap || !section) return;
+
+  let cooldownMs = 0; // no cooldown by default — every click works
+  let onCooldown = false;
+  let tapEnabled = true;
+  let cdInterval = null;
+  let followMode = false;
+  let followX = 0, followY = 0;
+  let followRAF = null;
+  let currentAnim = null;
+
+  window.__setUfoTapEnabled = (v) => { tapEnabled = v; };
+  window.__setUfoCooldown = (s) => { cooldownMs = s * 1000; };
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  function showRipple(x, y) {
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    ripple.classList.remove('active');
+    void ripple.offsetWidth;
+    ripple.classList.add('active');
+  }
+
+  // ----- Single click: orbit and leave -----
+  function summonOrbit(tapX, tapY) {
+    if (onCooldown || !tapEnabled || followMode) return;
+    if (cooldownMs > 0) onCooldown = true;
+
+    showRipple(tapX, tapY);
+    if (currentAnim) currentAnim.cancel();
+
+    const localX = tapX, localY = tapY;
+    const duration = 4000;
+    const radius = 110;
+    const steps = 32;
+    const kf = [];
+
+    const entryFromLeft = localX > window.innerWidth / 2;
+    const startX = entryFromLeft ? -80 : window.innerWidth + 80;
+    const startY = localY + rand(-40, 40);
+    const flip = entryFromLeft ? 1 : -1;
+
+    kf.push({ transform: `translate(${startX}px, ${startY}px) scaleX(${flip}) rotate(0deg)`, opacity: 0, offset: 0 });
+    kf.push({ transform: `translate(${startX}px, ${startY}px) scaleX(${flip}) rotate(0deg)`, opacity: 0.6, offset: 0.05 });
+    kf.push({ transform: `translate(${localX + radius}px, ${localY}px) scaleX(${flip}) rotate(${flip * 8}deg)`, opacity: 1, offset: 0.18 });
+
+    for (let i = 1; i <= steps; i++) {
+      const t = i / steps;
+      const angle = t * Math.PI * 2.5;
+      const x = localX + Math.cos(angle) * radius;
+      const y = localY + Math.sin(angle) * radius * 0.6;
+      const tilt = Math.sin(angle + Math.PI / 2) * 12;
+      const offset = 0.18 + (t * 0.62);
+      kf.push({
+        transform: `translate(${x}px, ${y}px) scaleX(${flip}) rotate(${tilt}deg)`,
+        opacity: 1, offset,
+      });
+    }
+    const exitX = entryFromLeft ? window.innerWidth + 100 : -100;
+    kf.push({ transform: `translate(${exitX}px, ${localY - 60}px) scaleX(${flip}) rotate(${flip * -10}deg)`, opacity: 0.7, offset: 0.95 });
+    kf.push({ transform: `translate(${exitX}px, ${localY - 80}px) scaleX(${flip}) rotate(${flip * -15}deg)`, opacity: 0, offset: 1 });
+
+    ufoTap.style.opacity = '0';
+    ufoTap.style.transition = 'none';
+    ufoTap.style.transform = '';
+    void ufoTap.offsetWidth;
+    currentAnim = ufoTap.animate(kf, { duration, easing: 'cubic-bezier(0.4, 0, 0.6, 1)', fill: 'forwards' });
+    currentAnim.onfinish = () => { ufoTap.style.opacity = '0'; };
+
+    if (cooldownMs > 0) startCooldownHud();
+  }
+
+  function startCooldownHud() {
+    let remaining = Math.ceil(cooldownMs / 1000);
+    cdHud.classList.add('visible');
+    cdTime.textContent = remaining + 's';
+    if (cdInterval) clearInterval(cdInterval);
+    cdInterval = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) {
+        clearInterval(cdInterval);
+        cdHud.classList.remove('visible');
+        onCooldown = false;
+      } else cdTime.textContent = remaining + 's';
+    }, 1000);
+  }
+
+  // ----- Double click: follow mode -----
+  function startFollow(x, y) {
+    if (currentAnim) { currentAnim.cancel(); currentAnim = null; }
+    followMode = true;
+    followX = x; followY = y;
+    section.classList.add('ufo-following');
+
+    // Fade in at cursor location
+    ufoTap.style.transition = 'opacity 200ms ease-out';
+    ufoTap.style.opacity = '1';
+    showRipple(x, y);
+
+    let smoothX = x, smoothY = y, lastX = x;
+    const tick = () => {
+      if (!followMode) return;
+      smoothX += (followX - smoothX) * 0.18;
+      smoothY += (followY - smoothY) * 0.18;
+      const flip = (followX - lastX) > 0.5 ? -1 : ((followX - lastX) < -0.5 ? 1 : (ufoTap.dataset.flip || -1));
+      ufoTap.dataset.flip = flip;
+      const tilt = Math.max(-15, Math.min(15, (followX - smoothX) * 0.4));
+      // Hover offset above cursor so you can see the cursor target
+      const offsetY = -28;
+      ufoTap.style.transform = `translate(${(smoothX - 28).toFixed(1)}px, ${(smoothY + offsetY).toFixed(1)}px) scaleX(${flip}) rotate(${tilt.toFixed(1)}deg)`;
+      lastX = followX;
+      followRAF = requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  function stopFollow() {
+    if (!followMode) return;
+    followMode = false;
+    if (followRAF) cancelAnimationFrame(followRAF);
+    section.classList.remove('ufo-following');
+    // Fade out
+    ufoTap.style.transition = 'opacity 400ms ease-out';
+    ufoTap.style.opacity = '0';
+  }
+
+  // ----- Event handling: distinguish single vs double click -----
+  let pendingClick = null;
+  const DOUBLE_DELAY = 280;
+
+  function getXY(e) {
+    if (e.touches && e.touches[0]) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    if (e.changedTouches && e.changedTouches[0]) return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+    return { x: e.clientX, y: e.clientY };
+  }
+
+  function isInteractive(t) {
+    return t.closest('.card') || t.closest('.tweaks-panel') || t.closest('.mock-header') || t.closest('a') || t.closest('button');
+  }
+
+  section.addEventListener('click', (e) => {
+    if (isInteractive(e.target) || !tapEnabled) return;
+    const { x, y } = getXY(e);
+
+    // If game is running, ignore taps (let game handle)
+    if (window.__isGameActive && window.__isGameActive()) return;
+
+    // If already following, click ends follow
+    if (followMode) { stopFollow(); return; }
+
+    if (pendingClick) {
+      // Second click within window = double click → start GAME
+      clearTimeout(pendingClick.timer);
+      pendingClick = null;
+      if (window.__startGameAt) window.__startGameAt(x, y);
+      else startFollow(x, y);
+    } else {
+      pendingClick = {
+        timer: setTimeout(() => {
+          summonOrbit(pendingClick.x, pendingClick.y);
+          pendingClick = null;
+        }, DOUBLE_DELAY),
+        x, y,
+      };
+    }
+  });
+
+  // Touch: dblclick via double tap
+  let lastTap = 0;
+  section.addEventListener('touchend', (e) => {
+    if (isInteractive(e.target) || !tapEnabled) return;
+    const { x, y } = getXY(e);
+    const now = Date.now();
+
+    if (followMode) { stopFollow(); e.preventDefault(); return; }
+
+    if (now - lastTap < DOUBLE_DELAY) {
+      // Cancel pending single
+      if (pendingClick) { clearTimeout(pendingClick.timer); pendingClick = null; }
+      if (window.__startGameAt) window.__startGameAt(x, y);
+      else startFollow(x, y);
+      lastTap = 0;
+      e.preventDefault();
+    } else {
+      lastTap = now;
+    }
+  }, { passive: false });
+
+  // Track cursor / touch for follow mode
+  section.addEventListener('mousemove', (e) => {
+    if (!followMode) return;
+    followX = e.clientX; followY = e.clientY;
+  });
+  section.addEventListener('touchmove', (e) => {
+    if (!followMode) return;
+    if (e.touches[0]) {
+      followX = e.touches[0].clientX;
+      followY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  // Leave star area = stop follow
+  section.addEventListener('mouseleave', stopFollow);
+
+  window.__summonUfoCenter = () => summonOrbit(window.innerWidth / 2, window.innerHeight / 2);
+  window.__stopFollow = stopFollow;
+})();
+
+// ============== UFO SURVIVAL GAME: moved to /revival/game/field.js (2026-10-12 rebuild) ==============
+(function() {
+  const panel = document.getElementById('tweaks-panel');
+  const closeBtn = document.getElementById('tweaks-close');
+  const tapToggle = document.getElementById('tap-toggle');
+  const tapState = document.getElementById('tap-state');
+  const cdSlider = document.getElementById('cd-slider');
+  const cdVal = document.getElementById('cd-val');
+  const summonBtn = document.getElementById('summon-btn');
+
+  if (!panel) return;
+
+  // Host protocol
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === '__activate_edit_mode') panel.classList.add('open');
+    if (e.data && e.data.type === '__deactivate_edit_mode') panel.classList.remove('open');
+  });
+  // Announce availability after listener is registered
+  try { window.parent.postMessage({ type: '__edit_mode_available' }, '*'); } catch(e){}
+
+  closeBtn.addEventListener('click', () => {
+    panel.classList.remove('open');
+    try { window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*'); } catch(e){}
+  });
+
+  // Tap toggle
+  tapToggle.addEventListener('click', () => {
+    const on = !tapToggle.classList.contains('on');
+    tapToggle.classList.toggle('on', on);
+    tapState.textContent = on ? 'ON' : 'OFF';
+    if (window.__setUfoTapEnabled) window.__setUfoTapEnabled(on);
+  });
+
+  // Cooldown slider
+  cdSlider.addEventListener('input', () => {
+    const v = parseInt(cdSlider.value);
+    cdVal.textContent = v + 's';
+    if (window.__setUfoCooldown) window.__setUfoCooldown(v);
+  });
+
+  // Summon now
+  summonBtn.addEventListener('click', () => {
+    if (window.__summonUfoCenter) window.__summonUfoCenter();
+  });
+})();
+
+(function() {
+  const layers = [
+    { el: document.getElementById('far-stars'), depth: 4 },
+    { el: document.getElementById('mid-stars'), depth: 8 },
+    { el: document.getElementById('near-stars'), depth: 14 },
+    { el: document.getElementById('big-stars'), depth: 22 },
+  ];
+  let mx = 0, my = 0, tx = 0, ty = 0;
+  document.addEventListener('mousemove', (e) => {
+    mx = (e.clientX / window.innerWidth - 0.5);
+    my = (e.clientY / window.innerHeight - 0.5);
+  });
+  function tick() {
+    tx += (mx - tx) * 0.05;
+    ty += (my - ty) * 0.05;
+    layers.forEach(l => {
+      if (l.el) l.el.style.transform = `translate3d(${(-tx * l.depth).toFixed(1)}px, ${(-ty * l.depth).toFixed(1)}px, 0)`;
+    });
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+</script>
+<script src="/revival/game/sun.js?v=2"></script>
+<script src="/revival/game/field.js?v=2"></script>
+
+<aside data-ai-disclosure role="note" style="width:min(calc(100% - 32px),1100px);margin:28px auto;padding:15px 18px;border:1px solid rgba(99,115,129,.35);border-left:4px solid #2563eb;border-radius:6px;background:#f8fafc;color:#1f2937;font:13px/1.55 Inter,system-ui,Segoe UI,Arial,sans-serif;text-align:left"><strong>AI-assisted content disclosure:</strong> This page may include text, code, visuals, summaries, or research drafted or edited with generative AI. Service Pricer LLC remains responsible for publication. Live or automated outputs may not receive item-by-item human review and should be independently verified. <a href="/ai-disclosure.html" style="color:#1d4ed8;font-weight:700">AI Content &amp; Review Policy</a>.</aside><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a57b7fd0cab0eb22',t:'MTc5NDIxMzQ4Ng=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a57b7fd0cab0eb22',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
